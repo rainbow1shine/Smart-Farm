@@ -11,6 +11,7 @@ const proxy = {
 }
 
 export default defineConfig({
+  base: '/Smart-Farm/',
   plugins: [vue()],
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) }
