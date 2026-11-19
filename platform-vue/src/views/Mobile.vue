@@ -22,7 +22,7 @@
         </div>
         <div class="mp-actions-row">
           <el-button type="primary" size="large" @click="$router.push('/mall')">打开完整商城</el-button>
-          <el-button size="large" @click="$router.push('/login')">消费者登录</el-button>
+          <el-button size="large" @click="$router.push('/login?redirect=/mobile')">消费者登录</el-button>
         </div>
         <div class="mp-note">
           <el-icon><InfoFilled /></el-icon>
@@ -134,11 +134,62 @@
                 </div>
               </template>
 
+              <template v-else-if="activeTab === 'product'">
+                <div class="m-sub-head"><button @click="back()">‹</button><b>商品详情</b></div>
+                <template v-if="selectedGoods">
+                  <div class="m-pd-cover">{{ selectedGoods.icon }}</div>
+                  <div class="m-pd-card">
+                    <b>{{ selectedGoods.name }}</b>
+                    <small>{{ selectedGoods.spec }}</small>
+                    <div class="m-pd-price">¥{{ selectedGoods.price }} <em>{{ selectedGoods.tag }}</em></div>
+                    <p>产地直供，当日采摘后预冷发货，支持一物一码溯源查询。</p>
+                    <button class="m-pd-buy" @click="addCart(selectedGoods)">加入购物车</button>
+                  </div>
+                </template>
+              </template>
+
+              <template v-else-if="activeTab === 'cart'">
+                <div class="m-sub-head"><button @click="back()">‹</button><b>购物车（{{ cart.count }}）</b></div>
+                <div v-if="cart.details.length" class="m-cart">
+                  <div v-for="g in cart.details" :key="g.id" class="m-cart-item">
+                    <span class="mci-emoji">{{ g.icon }}</span>
+                    <div class="mci-main">
+                      <b>{{ g.name }}</b>
+                      <small>{{ g.spec }}</small>
+                      <span class="mci-price">¥{{ g.price }}</span>
+                    </div>
+                    <div class="mci-qty">
+                      <button @click="cart.setQty(g.id, g.qty - 1)">-</button>
+                      <span>{{ g.qty }}</span>
+                      <button @click="cart.setQty(g.id, g.qty + 1)">+</button>
+                    </div>
+                  </div>
+                  <div class="m-cart-foot">
+                    <span>合计 <b>¥{{ cart.subtotal.toFixed(2) }}</b></span>
+                    <button @click="toCheckout">去结算</button>
+                  </div>
+                </div>
+                <div v-else class="m-empty">购物车还是空的，去挑点新鲜的吧</div>
+              </template>
+
+              <template v-else-if="activeTab === 'orders'">
+                <div class="m-sub-head"><button @click="back()">‹</button><b>我的订单</b></div>
+                <div v-if="!auth.isLogged" class="m-empty">登录后即可查看订单</div>
+                <div v-else-if="!mall.orders.length" class="m-empty">还没有订单，去逛逛吧</div>
+                <div v-else class="m-orders">
+                  <div v-for="o in mall.orders" :key="o.no" class="m-order">
+                    <div class="mo-top"><b>{{ o.no }}</b><em>{{ o.status }}</em></div>
+                    <div class="mo-goods">{{ o.goods }}</div>
+                    <div class="mo-foot"><span>{{ o.time }}</span><strong>¥{{ o.amount }}</strong></div>
+                  </div>
+                </div>
+              </template>
+
               <template v-else>
                 <div class="m-profile-head">
                   <div class="mp-avatar">{{ auth.user?.name?.slice(0, 1) || '客' }}</div>
                   <div><b>{{ auth.user?.name || '商城用户' }}</b><span>{{ auth.isLogged ? '青梅会员 · 已登录' : '登录后享受更多权益' }}</span></div>
-                  <button @click="$router.push(auth.isLogged ? '/mall/profile' : '/login')">{{ auth.isLogged ? '个人中心' : '登录' }}</button>
+                  <button @click="goLogin">{{ auth.isLogged ? '个人中心' : '登录' }}</button>
                 </div>
                 <div class="m-profile-stats">
                   <div><b>{{ mall.orders.length }}</b><span>我的订单</span></div>
@@ -146,7 +197,7 @@
                   <div><b>{{ mall.unreadCount }}</b><span>消息</span></div>
                 </div>
                 <div class="m-menu">
-                  <button v-for="m in profileMenus" :key="m.label" @click="$router.push(m.to)">
+                  <button v-for="m in profileMenus" :key="m.label" @click="onMenu(m)">
                     <span>{{ m.icon }}</span><b>{{ m.label }}</b><em>{{ m.hint }}</em><i>›</i>
                   </button>
                 </div>
@@ -184,6 +235,7 @@ const cart = useCartStore()
 const mall = useMallStore()
 
 const activeTab = ref('home')
+const selectedGoods = ref(null)
 const keyword = ref('')
 const cat = ref('全部')
 const traceCode = ref('TR-00021')
@@ -209,19 +261,39 @@ const traceSteps = computed(() => [
   { title: '农残检测', text: traceInfo.value.test }
 ])
 const profileMenus = computed(() => [
-  { icon: '📦', label: '我的订单', hint: '查看物流与评价', to: '/mall/orders' },
-  { icon: '♡', label: '我的收藏', hint: `${mall.favorites.length} 款商品`, to: '/mall/profile' },
-  { icon: '📍', label: '收货地址', hint: '管理常用地址', to: '/mall/profile' },
-  { icon: '🔎', label: '产品溯源', hint: '一物一码', to: '/mall/trace' },
-  { icon: '🎧', label: '联系客服', hint: '6:00 – 22:00', to: '/mall' }
+  { icon: '📦', label: '我的订单', hint: '查看物流与评价', action: 'orders' },
+  { icon: '♡', label: '我的收藏', hint: `${mall.favorites.length} 款商品`, action: 'fav' },
+  { icon: '📍', label: '收货地址', hint: '管理常用地址', action: 'addr' },
+  { icon: '🔎', label: '产品溯源', hint: '一物一码', action: 'trace' },
+  { icon: '🎧', label: '联系客服', hint: '6:00 – 22:00', action: 'service' }
 ])
+
+function onMenu(m) {
+  if (m.action === 'orders') return (activeTab.value = 'orders')
+  if (m.action === 'trace') return (activeTab.value = 'trace')
+  if (m.action === 'fav') return ElMessage.info(`已收藏 ${mall.favorites.length} 款商品，可在完整商城查看`)
+  if (m.action === 'addr') return ElMessage.info('收货地址管理请在完整商城个人中心操作')
+  ElMessage.info('客服在线时间 6:00 – 22:00，可在完整商城联系')
+}
+function goLogin() {
+  if (auth.isLogged) return ElMessage.info('当前已登录，可在完整商城查看个人中心')
+  router.push('/login?redirect=/mobile')
+}
+function back() {
+  activeTab.value = activeTab.value === 'orders' ? 'profile' : 'home'
+  selectedGoods.value = null
+}
+function toCheckout() {
+  if (!cart.count) return ElMessage.warning('购物车是空的')
+  ElMessage.info('结算请在完整商城完成')
+}
 
 function addCart(g) {
   const res = cart.add(g.id, 1)
   ElMessage[res.ok ? 'success' : 'warning'](res.ok ? `${g.name} 已加入购物车` : res.message)
 }
-function openGoods(g) { router.push(`/mall/product/${g.id}`) }
-function goCart() { router.push('/mall/cart') }
+function openGoods(g) { selectedGoods.value = g; activeTab.value = 'product' }
+function goCart() { activeTab.value = 'cart' }
 function notify() {
   mall.addMessage({ type: '系统', title: '移动端预览', text: '这是移动端演示预览，完整功能请进入商城体验。' })
   ElMessage.info('你有一条新消息')
@@ -360,6 +432,37 @@ function queryTrace() {
 .app-tabbar small { font-size: 7px; }
 .app-tabbar button.on { color: var(--brand-600); }
 .phone-shadow { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); width: 260px; height: 36px; border-radius: 50%; background: rgba(30, 60, 40, .14); filter: blur(14px); z-index: 1; }
+.m-sub-head { display: flex; align-items: center; gap: 6px; padding: 2px 2px 8px; }
+.m-sub-head button { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 13px; line-height: 1; color: var(--ink-500); }
+.m-sub-head b { font-size: 12px; }
+.m-pd-cover { height: 148px; border-radius: 14px; background: linear-gradient(135deg, #f1f8ec, #dcecd7); display: grid; place-items: center; font-size: 68px; }
+.m-pd-card { margin-top: 8px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+.m-pd-card > b { font-size: 11px; }
+.m-pd-card > small { display: block; font-size: 8px; color: var(--ink-400); }
+.m-pd-price { display: flex; align-items: center; gap: 6px; margin: 6px 0; font-size: 15px; font-weight: 700; color: #b5473d; }
+.m-pd-price em { font-style: normal; font-size: 7px; font-weight: 400; color: var(--brand-600); background: var(--brand-50); border-radius: 6px; padding: 1px 5px; }
+.m-pd-card > p { font-size: 8px; color: var(--ink-400); line-height: 1.6; }
+.m-pd-buy { margin-top: 8px; width: 100%; border: none; background: var(--brand-600); color: #fff; border-radius: 16px; padding: 8px; font-size: 9px; cursor: pointer; }
+.m-cart { display: flex; flex-direction: column; gap: 7px; }
+.m-cart-item { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 11px; padding: 8px; }
+.mci-emoji { width: 44px; height: 44px; border-radius: 9px; background: linear-gradient(135deg, #f1f8ec, #dcecd7); display: grid; place-items: center; font-size: 22px; flex: 0 0 44px; }
+.mci-main { flex: 1; min-width: 0; }
+.mci-main b { display: block; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mci-main small { display: block; font-size: 7.5px; color: var(--ink-400); }
+.mci-price { font-size: 11px; font-weight: 700; color: #b5473d; }
+.mci-qty { display: flex; align-items: center; gap: 5px; }
+.mci-qty button { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 10px; line-height: 1; color: var(--ink-600); }
+.mci-qty span { min-width: 12px; text-align: center; font-size: 9px; }
+.m-cart-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; background: #fff; border: 1px solid var(--line); border-radius: 11px; padding: 9px 11px; font-size: 8.5px; }
+.m-cart-foot b { font-size: 13px; color: #b5473d; }
+.m-cart-foot button { border: none; background: var(--brand-600); color: #fff; border-radius: 14px; padding: 5px 12px; font-size: 8.5px; cursor: pointer; }
+.m-orders { display: flex; flex-direction: column; gap: 7px; }
+.m-order { background: #fff; border: 1px solid var(--line); border-radius: 11px; padding: 9px 10px; }
+.mo-top { display: flex; align-items: center; justify-content: space-between; font-size: 8px; color: var(--ink-400); }
+.mo-top em { font-style: normal; color: var(--brand-600); }
+.mo-goods { margin: 5px 0; font-size: 9.5px; }
+.mo-foot { display: flex; align-items: center; justify-content: space-between; font-size: 8px; color: var(--ink-400); }
+.mo-foot strong { font-size: 10.5px; color: #b5473d; }
 @media (max-width: 1000px) {
   .mp-main { grid-template-columns: 1fr; gap: 40px; padding-top: 16px; }
   .mp-preview { order: -1; }
