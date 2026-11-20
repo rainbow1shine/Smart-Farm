@@ -41,3 +41,6 @@ desktop.ini
 .vite/
 .eslintcache
 coverage/
+
+# 截图原图（README 引用的是 docs/screenshots 下的压缩版）
+.screenshots/
