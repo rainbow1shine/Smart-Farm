@@ -1,0 +1,152 @@
+:root {
+  --brand-900: #1f3526;
+  --brand-800: #294a33;
+  --brand-700: #356040;
+  --brand-600: #3f6f4a;
+  --brand-500: #56855d;
+  --brand-400: #7ba37f;
+  --brand-300: #a8c4a9;
+  --brand-200: #cfdfcd;
+  --brand-100: #e7f0e3;
+  --brand-50: #f2f7ee;
+  --accent: #c28632;
+  --accent-soft: #fbf1df;
+  --ink-900: #1b2721;
+  --ink-700: #3d4b43;
+  --ink-500: #66756c;
+  --ink-400: #8b998f;
+  --ink-300: #b3beb5;
+  --line: #e4e8df;
+  --line-strong: #d3dacd;
+  --bg: #f5f7f1;
+  --bg-soft: #fafbf7;
+  --card: #ffffff;
+  --cream: #f7f5ee;
+  --theme-gradient: linear-gradient(135deg, #b7d7a8 0%, #cde8c7 100%);
+  --danger: #c65b4e;
+  --warning: #c98a2e;
+  --success: #4f8b5a;
+  --info: #4b7f9e;
+  --shadow-sm: 0 1px 3px rgba(29, 53, 35, 0.06);
+  --shadow: 0 10px 30px rgba(29, 53, 35, 0.08);
+  --shadow-lg: 0 24px 60px rgba(29, 53, 35, 0.12);
+  --radius: 14px;
+  --radius-lg: 22px;
+  --el-color-primary: #3f6f4a;
+  --el-color-primary-light-3: #6d9274;
+  --el-color-primary-light-5: #9bb59e;
+  --el-color-primary-light-7: #c5d5c4;
+  --el-color-primary-light-8: #dbe6d8;
+  --el-color-primary-light-9: #eff5eb;
+  --el-color-primary-dark-2: #32593b;
+  --el-border-radius-base: 9px;
+  --el-font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --el-text-color-primary: #1b2721;
+  --el-text-color-regular: #4d5c53;
+  --el-border-color: #e1e6dc;
+  --el-border-color-light: #e8ece4;
+  --el-fill-color-light: #f6f8f2;
+}
+
+* { box-sizing: border-box; }
+html, body, #app { min-height: 100%; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  color: var(--ink-900);
+  background: #cde8c7;
+  background-image: var(--theme-gradient);
+  background-size: cover;
+  background-attachment: fixed;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font-family: inherit; }
+img, svg { vertical-align: middle; }
+h1, h2, h3, h4, h5, p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+::selection { background: #cfe3c9; color: #1f3526; }
+
+:focus-visible { outline: 2px solid var(--brand-500); outline-offset: 2px; }
+
+.page-wrap { padding: 24px 26px 40px; max-width: 1560px; margin: 0 auto; }
+.page-grid { display: grid; gap: 18px; }
+.muted { color: var(--ink-500); }
+.tiny { font-size: 12px; }
+.small { font-size: 13px; }
+.spacer { flex: 1; }
+.flex { display: flex; align-items: center; }
+.gap-8 { gap: 8px; } .gap-12 { gap: 12px; } .gap-16 { gap: 16px; }
+.mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+.text-right { text-align: right; }
+.w-full { width: 100%; }
+.serif { font-family: "Noto Serif SC", "Songti SC", Georgia, serif; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.card-pad { padding: 20px 22px; }
+.card-head { display: flex; align-items: center; gap: 10px; padding: 17px 20px; border-bottom: 1px solid var(--line); }
+.card-head h3 { font-size: 15px; font-weight: 600; letter-spacing: .2px; }
+.card-head .sub { font-size: 12px; color: var(--ink-400); }
+.card-head .acts { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+.section-title { display: flex; align-items: center; gap: 10px; margin: 6px 0 16px; }
+.section-title::before { content: ""; width: 4px; height: 18px; border-radius: 3px; background: var(--brand-600); }
+.section-title h2 { font-size: 19px; letter-spacing: .3px; }
+.section-title .more { margin-left: auto; font-size: 12.5px; color: var(--ink-500); cursor: pointer; }
+.section-title .more:hover { color: var(--brand-600); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  height: 30px; padding: 0 13px; border-radius: 20px;
+  background: #fff; border: 1px solid var(--line-strong);
+  font-size: 12.5px; color: var(--ink-500); cursor: pointer; transition: all .18s;
+}
+.chip:hover { border-color: var(--brand-400); color: var(--brand-700); }
+.chip.on { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
+
+.soft-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 20px; font-size: 11.5px;
+  background: var(--brand-50); color: var(--brand-700); border: 1px solid var(--brand-100);
+}
+
+.empty-box { padding: 56px 20px; text-align: center; color: var(--ink-400); }
+.empty-box .icon { font-size: 44px; margin-bottom: 8px; opacity: .5; }
+
+.el-button { font-weight: 500; }
+.el-button--primary { --el-button-bg-color: var(--brand-600); --el-button-border-color: var(--brand-600); --el-button-hover-bg-color: var(--brand-500); --el-button-hover-border-color: var(--brand-500); }
+.el-card { border-radius: var(--radius); border-color: var(--line); }
+.el-dialog { border-radius: 16px; overflow: hidden; }
+.el-dialog__header { padding: 20px 22px 10px; margin: 0; }
+.el-dialog__title { font-size: 16px; font-weight: 600; }
+.el-dialog__body { padding: 14px 22px 18px; }
+.el-dialog__footer { padding: 0 22px 20px; }
+.el-drawer { border-radius: 18px 0 0 18px; }
+.el-table { --el-table-header-bg-color: #f7f9f3; --el-table-header-text-color: #526057; --el-table-row-hover-bg-color: #f9fbf5; font-size: 13px; }
+.el-table th.el-table__cell { font-weight: 600; font-size: 12.5px; }
+.el-table .cell { line-height: 1.55; }
+.el-pagination { --el-pagination-button-bg-color: #fff; }
+.el-tabs__item { font-size: 13.5px; }
+.el-tabs__item.is-active { font-weight: 600; }
+.el-input__wrapper, .el-textarea__inner { border-radius: 9px; }
+.el-form-item__label { font-size: 13px; color: var(--ink-700); }
+.el-message { border-radius: 10px; }
+
+.fade-enter-active, .fade-leave-active { transition: opacity .18s ease, transform .18s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; transform: translateY(6px); }
+
+@media (max-width: 900px) {
+  .page-wrap { padding: 16px 14px 32px; }
+}
+@media (max-width: 620px) {
+  .page-wrap { padding: 12px 12px 28px; }
+  .card-pad { padding: 16px; }
+}
