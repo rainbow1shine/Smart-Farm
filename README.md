@@ -87,8 +87,6 @@
 
 ![可视化大屏](docs/screenshots/07-screen.png)
 
-![可视化大屏概览](docs/screenshots/08-screen-overview.jpg)
-
 **移动端预览（农户工作台）**
 
 ![移动端预览](docs/screenshots/09-mobile.png)
