@@ -155,7 +155,7 @@ const farmers = DB.users.filter(u => u.role === '农户')
 const createOpen = ref(false)
 const detailOpen = ref(false)
 const current = ref(null)
-const form = reactive({ plot: DB.plots[0].id, type: '施肥', assignee: '李国强', plan: dateOnly(), title: '', material: '' })
+const form = reactive({ plot: DB.plots[0].id, type: '施肥', assignee: '吴农户', plan: dateOnly(), title: '', material: '' })
 
 const count = (s) => orders.value.filter(w => w.status === s).length
 const totalHours = computed(() => orders.value.reduce((a, b) => a + b.hours, 0).toFixed(1))

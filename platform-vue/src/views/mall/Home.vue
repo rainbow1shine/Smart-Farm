@@ -305,22 +305,22 @@ function contact() { ElMessage.info('客服热线：400-880-2026（演示环境�
 .cat-card em { font-style: normal; font-size: 9.5px; color: var(--ink-400); background: rgba(255,255,255,.6); border-radius: 20px; padding: 1px 7px; }
 .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .product-grid :deep(.product-card) { background: transparent; border: 1px solid #ecefe6; }
-.trace-section { margin-top: 58px; background: #20352a; color: #c9ddc9; }
+.trace-section { margin-top: 58px; background: linear-gradient(135deg, #3f7d4b 0%, #5a9a60 100%); color: #e2f0dc; }
 .trace-inner { max-width: 1200px; margin: 0 auto; padding: 52px 24px; display: grid; grid-template-columns: 1fr .92fr; gap: 44px; align-items: center; }
-.trace-copy .kicker { color: #8fbb92; }
-.trace-copy h2 { font-size: 31px; color: #f1f8ec; line-height: 1.35; margin: 10px 0 12px; }
-.trace-copy p { font-size: 12.5px; line-height: 1.9; color: #9db7a3; max-width: 450px; }
+.trace-copy .kicker { color: #bde0b7; }
+.trace-copy h2 { font-size: 31px; color: #ffffff; line-height: 1.35; margin: 10px 0 12px; }
+.trace-copy p { font-size: 12.5px; line-height: 1.9; color: #e0efd9; max-width: 450px; }
 .trace-search { display: flex; gap: 8px; margin-top: 20px; max-width: 440px; }
 .trace-search :deep(.el-input__wrapper) { background: rgba(255,255,255,.1); box-shadow: 0 0 0 1px rgba(255,255,255,.16) inset; }
 .trace-search :deep(.el-input__inner) { color: #eaf6e7; }
-.trace-search :deep(.el-input__inner::placeholder) { color: #789281; }
+.trace-search :deep(.el-input__inner::placeholder) { color: #a9c6a4; }
 .trace-search :deep(.el-button--primary) { --el-button-bg-color: #d7e9bf; --el-button-border-color: #d7e9bf; --el-button-text-color: #24402c; }
-.quick-codes { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 10.5px; color: #789281; flex-wrap: wrap; }
+.quick-codes { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 10.5px; color: #bcd6b6; flex-wrap: wrap; }
 .quick-codes button { border: 1px solid rgba(255,255,255,.15); background: transparent; color: #b6d2b8; border-radius: 20px; padding: 2px 8px; font-size: 10.5px; cursor: pointer; }
 .quick-codes button:hover { background: rgba(255,255,255,.08); }
 .trace-points { display: flex; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
-.trace-points span { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: #a9c4ae; }
-.trace-points i { width: 5px; height: 5px; border-radius: 50%; background: #9ccb8b; }
+.trace-points span { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: #dbecd4; }
+.trace-points i { width: 5px; height: 5px; border-radius: 50%; background: #cdeec2; }
 .tp-card { background: #fbfcf7; border-radius: 20px; padding: 20px; color: var(--ink-900); box-shadow: 0 26px 60px rgba(5, 20, 10, .28); }
 .tp-top { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px dashed var(--line-strong); }
 .tp-qr { width: 42px; height: 42px; border-radius: 11px; background: var(--brand-50); color: var(--brand-600); display: grid; place-items: center; font-size: 22px; }
@@ -374,12 +374,12 @@ function contact() { ElMessage.info('客服热线：400-880-2026（演示环境�
 .faq-q { font-size: 14px; font-weight: 500; }
 .faq-a { font-size: 12.5px; color: var(--ink-500); line-height: 1.9; }
 .cta { max-width: 1240px; margin: 52px auto 0; padding: 0 24px; }
-.cta-inner { background: linear-gradient(120deg, #2e5137, #47754c 62%, #6c9667); border-radius: 22px; padding: 28px 34px; display: flex; align-items: center; gap: 18px; color: #e8f2e5; flex-wrap: wrap; }
-.cta-emoji { font-size: 46px; }
+.cta-inner { background: linear-gradient(120deg, #b7d7a8 0%, #cde8c7 100%); border: 1px solid rgba(255,255,255,.65); border-radius: 22px; padding: 28px 34px; display: flex; align-items: center; gap: 18px; color: #24402c; box-shadow: 0 14px 30px rgba(70, 120, 78, .12); flex-wrap: wrap; }
+.cta-emoji { font-size: 38px; width: 62px; height: 62px; border-radius: 16px; background: rgba(255,255,255,.6); display: grid; place-items: center; flex: 0 0 62px; }
 .cta-inner > div { flex: 1; min-width: 240px; }
-.cta-inner h2 { font-size: 21px; color: #fff; }
-.cta-inner p { font-size: 12px; color: #bdd6bd; margin-top: 4px; }
-.cta-inner :deep(.el-button--primary) { --el-button-bg-color: #d7e9bf; --el-button-border-color: #d7e9bf; --el-button-text-color: #24402c; }
+.cta-inner h2 { font-size: 21px; color: #1f3526; }
+.cta-inner p { font-size: 12px; color: #3f5a49; margin-top: 4px; }
+.cta-inner :deep(.el-button--primary) { --el-button-bg-color: #3d7a49; --el-button-border-color: #3d7a49; --el-button-text-color: #fff; --el-button-hover-bg-color: #345f3d; --el-button-hover-border-color: #345f3d; --el-button-hover-text-color: #fff; box-shadow: 0 8px 18px rgba(45, 86, 55, .18); }
 @media (max-width: 1000px) {
   .hero-inner { grid-template-columns: 1fr; padding-top: 46px; }
   .hero-visual { display: none; }

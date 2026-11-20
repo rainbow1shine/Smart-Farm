@@ -107,7 +107,7 @@ export const useAdminStore = defineStore('admin', {
     },
     handleAlarm(id, note, status = '已处置') {
       const a = this.alarms.find(x => x.id === id)
-      if (a) { a.status = status; a.note = note; a.handledAt = dateTime(); a.handler = '周运维' }
+      if (a) { a.status = status; a.note = note; a.handledAt = dateTime(); a.handler = 王运维 }
       this.save()
       return a
     },
@@ -179,7 +179,7 @@ export const useAdminStore = defineStore('admin', {
     },
     assignRepair(id) {
       const r = this.repairs.find(x => x.id === id)
-      if (r) { r.status = '维修中'; r.assignee = '周运维' }
+      if (r) { r.status = '维修中'; r.assignee = 王运维 }
       this.save()
     },
     finishRepair(id) {

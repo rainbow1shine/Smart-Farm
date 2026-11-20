@@ -93,7 +93,7 @@
 
         <div class="demo-divider"><span>角色快捷体验</span></div>
         <div class="demo-grid">
-          <button v-for="d in DEMO_ACCOUNTS" :key="d.role" class="demo-card" :class="d.role" @click="quick(d)">
+          <button v-for="d in DEMO_ACCOUNTS" :key="d.account" class="demo-card" :class="d.role" @click="quick(d)">
             <span class="dc-avatar">{{ roleShort(d.role) }}</span>
             <div><b>{{ d.label }}</b><small>{{ d.desc }}</small></div>
             <el-icon class="dc-arrow"><ArrowRight /></el-icon>
@@ -183,7 +183,7 @@ async function sendCode() {
   }
 }
 function quick(d) {
-  const user = auth.quick(d.role)
+  const user = auth.quick(d.account)
   if (!user) return ElMessage.warning('快捷登录失败')
   ElMessage.success(`已以「${d.label}」身份进入`)
   afterLogin(user)

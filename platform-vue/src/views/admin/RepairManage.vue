@@ -108,10 +108,10 @@ const rowActions = computed(() => isFarmer.value
 )
 function onAction({ action, row }) {
   if (action === 'view') { current.value = row; detailOpen.value = true }
-  if (action === 'assign') { admin.assignRepair(row.id); ElMessage.success('已接单并派给周运维') }
+  if (action === 'assign') { admin.assignRepair(row.id); ElMessage.success('已接单并派给王运维') }
   if (action === 'finish') { admin.finishRepair(row.id); ElMessage.success('维修已完成，工单闭环') }
 }
-function assign(row) { admin.assignRepair(row.id); current.value = { ...row, status: '维修中', assignee: '周运维' }; ElMessage.success('已派工') }
+function assign(row) { admin.assignRepair(row.id); current.value = { ...row, status: '维修中', assignee: '王运维' }; ElMessage.success('已派工') }
 function finish(row) { admin.finishRepair(row.id); current.value = { ...row, status: '已完成' }; ElMessage.success('维修完成') }
 function submit() {
   if (!form.desc.trim()) return ElMessage.warning('请填写故障描述')

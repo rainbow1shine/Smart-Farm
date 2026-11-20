@@ -319,11 +319,11 @@ function downloadReport() {
 .rc-meta span { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--ink-400); }
 .rc-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10.5px; color: var(--brand-600); }
 .rc-foot em { font-style: normal; color: var(--ink-400); }
-.trace-cta { margin: 50px 0 20px; padding: 30px 34px; border-radius: 22px; background: linear-gradient(120deg, #2e5137, #47754c 62%, #6c9667); color: #eaf3e6; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.trace-cta { margin: 50px 0 20px; padding: 30px 34px; border-radius: 22px; background: linear-gradient(120deg, #3d7a49, #559257 62%, #7bab74); color: #edf7e8; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
 .trace-cta > div:first-child { flex: 1; min-width: 260px; }
-.trace-cta .kicker { color: #a9d0a0; }
+.trace-cta .kicker { color: #bde0b7; }
 .trace-cta h2 { font-size: 22px; color: #fff; margin: 5px 0 5px; }
-.trace-cta p { font-size: 12px; color: #bdd6bd; }
+.trace-cta p { font-size: 12px; color: #e0efd9; }
 .cta-actions { display: flex; gap: 9px; flex-wrap: wrap; }
 .cta-actions :deep(.el-button--primary) { --el-button-bg-color: #d7e9bf; --el-button-border-color: #d7e9bf; --el-button-text-color: #24402c; }
 .cta-actions :deep(.el-button:not(.el-button--primary)) { background: transparent; border-color: rgba(255,255,255,.35); color: #eaf3e6; }

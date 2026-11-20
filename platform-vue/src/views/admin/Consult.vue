@@ -12,7 +12,7 @@
       <StatCard :label="isExpert ? '咨询总数' : '我的咨询'" :value="consults.length" unit="条" :foot="isExpert ? '全部农户提问' : '历史对话累计'" icon="ChatLineSquare" />
       <StatCard label="待回复" :value="pending.length" unit="条" :foot="isExpert ? '平均响应 12 分钟' : '等待农艺师回复'" icon="Timer" tone="warn" />
       <StatCard label="已回复" :value="consults.length - pending.length" unit="条" :foot="isExpert ? '农户满意度 4.8 星' : '已得到专业建议'" icon="CircleCheck" />
-      <StatCard :label="isExpert ? '在线农户' : '在线农艺师'" :value="isExpert ? 3 : 2" :unit="isExpert ? '人' : '人'" :foot="isExpert ? '李国强 / 赵春燕 / 王德福' : '陈农艺 / 张植保'" icon="User" tone="info" />
+      <StatCard :label="isExpert ? '在线农户' : '在线农艺师'" :value="isExpert ? 3 : 2" :unit="isExpert ? '人' : '人'" :foot="isExpert ? '吴农户' : '张农艺'" icon="User" tone="info" />
     </div>
 
     <div class="consult-layout">
@@ -30,7 +30,7 @@
           <button v-for="c in shown" :key="c.id" class="conv-item" :class="{ on: current?.id === c.id }" @click="select(c)">
             <span class="conv-avatar">{{ (isExpert ? c.from : (c.from === auth.user?.name ? '我' : c.from)).slice(0, 1) }}</span>
             <div class="conv-main">
-              <div class="conv-title"><b>{{ isExpert ? c.from : '农艺师 · 陈农艺' }}</b><span>{{ c.time.slice(5, 10) }}</span></div>
+              <div class="conv-title"><b>{{ isExpert ? c.from : '农艺师 · 张农艺' }}</b><span>{{ c.time.slice(5, 10) }}</span></div>
               <p>{{ lastText(c) }}</p>
               <span class="conv-plot">{{ c.plot }}</span>
             </div>
@@ -48,7 +48,7 @@
         <div class="chat-head">
           <span class="chat-avatar" :class="{ expert: !isExpert }">{{ isExpert ? current.from.slice(0, 1) : '艺' }}</span>
           <div class="chat-who">
-            <b>{{ isExpert ? current.from + ' ' : '农艺师 · 陈农艺 ' }}<small>{{ isExpert ? current.role : '农艺技术人员' }}</small></b>
+            <b>{{ isExpert ? current.from + ' ' : '农艺师 · 张农艺 ' }}<small>{{ isExpert ? current.role : '农艺技术人员' }}</small></b>
             <span>{{ current.plot }} · 咨询编号 {{ current.id }}</span>
           </div>
           <StatusTag :status="current.status" />
@@ -193,7 +193,7 @@ function call() { ElMessage.info(`正在拨打 ${isExpert.value ? current.value?
 function refresh() { ElMessage.success('咨询列表已刷新') }
 function submitConsult() {
   if (!form.title.trim() || !form.content.trim()) return ElMessage.warning('请填写咨询主题和问题描述')
-  const c = admin.addConsult({ from: auth.user?.name || '李国强', role: '农户', plot: form.plot, title: form.title.trim(), content: form.content.trim() })
+  const c = admin.addConsult({ from: auth.user?.name || '吴农户', role: '农户', plot: form.plot, title: form.title.trim(), content: form.content.trim() })
   createOpen.value = false
   form.title = ''
   form.content = ''

@@ -221,17 +221,17 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 .login-btn { height: 36px; padding: 0 16px; border: none; border-radius: 20px; background: var(--brand-600); color: #fff; font-size: 12.5px; cursor: pointer; }
 .login-btn:hover { background: var(--brand-500); }
 .menu-btn { display: none; width: 38px; height: 38px; border: 1px solid var(--line); background: #fff; border-radius: 50%; cursor: pointer; font-size: 18px; }
-.mall-main { flex: 1; width: 100%; }
-.mall-footer { background: #20352a; color: #b8cbbb; margin-top: 50px; }
+.mall-main { flex: 1; width: 100%; background: var(--cream); padding-bottom: 48px; }
+.mall-footer { background: linear-gradient(180deg, #3f7d4b 0%, #5a9a60 100%); color: #e4f1dd; margin-top: 0; }
 .mf-inner { max-width: 1240px; margin: 0 auto; padding: 46px 24px 30px; display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 36px; }
-.mf-brand p { margin: 14px 0 16px; font-size: 12.5px; line-height: 1.9; color: #91ab98; max-width: 330px; }
+.mf-brand p { margin: 14px 0 16px; font-size: 12.5px; line-height: 1.9; color: #cfe2ca; max-width: 330px; }
 .mf-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.mf-chips span { font-size: 10.5px; border: 1px solid rgba(255,255,255,.14); border-radius: 20px; padding: 3px 9px; color: #a9c4ae; }
-.mf-col h4 { color: #e1efdf; font-size: 13px; margin-bottom: 14px; }
-.mf-col a, .mf-col p { display: block; font-size: 12.5px; color: #91ab98; margin-bottom: 9px; }
-.mf-col a:hover { color: #d7ecc9; }
+.mf-chips span { font-size: 10.5px; border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 3px 9px; color: #dcecd6; }
+.mf-col h4 { color: #f0f9eb; font-size: 13px; margin-bottom: 14px; }
+.mf-col a, .mf-col p { display: block; font-size: 12.5px; color: #cfe2ca; margin-bottom: 9px; }
+.mf-col a:hover { color: #ffffff; }
 .mf-col.contact p { display: flex; align-items: center; gap: 7px; }
-.mf-bottom { border-top: 1px solid rgba(255,255,255,.08); max-width: 1240px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; font-size: 11px; color: #789281; gap: 12px; flex-wrap: wrap; }
+.mf-bottom { border-top: 1px solid rgba(255,255,255,.16); max-width: 1240px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; font-size: 11px; color: #b9d3b4; gap: 12px; flex-wrap: wrap; }
 .msg-pop-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
 .msg-pop-head .link { font-size: 11.5px; color: var(--brand-600); cursor: pointer; }
 .msg-list { max-height: 360px; overflow: auto; }

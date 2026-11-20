@@ -417,17 +417,17 @@ function contact() { ElMessage.info('农户服务热线：400-880-2026（演示�
 .pc-head h3 { font-size: 14px; }
 .pc-head span { font-size: 10.5px; color: var(--brand-600); }
 .steps { display: flex; align-items: flex-start; }
-.step { position: relative; flex: 1; display: flex; gap: 9px; padding-right: 12px; }
+.step { position: relative; flex: 1; display: flex; align-items: flex-start; gap: 9px; padding-right: 12px; min-width: 0; }
 .step-dot { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line-strong); background: #fff; color: var(--ink-300); display: grid; place-items: center; font-size: 10px; flex: 0 0 24px; position: relative; z-index: 2; }
 .step.done .step-dot { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
 .step.current .step-dot { box-shadow: 0 0 0 4px rgba(86, 133, 93, .16); }
 .step.cancel .step-dot { background: var(--danger); border-color: var(--danger); color: #fff; }
-.step-body { min-width: 0; }
+.step-body { min-width: 0; flex: 0 1 auto; }
 .step-body b { display: block; font-size: 11px; color: var(--ink-400); }
 .step.done .step-body b { color: var(--ink-700); }
 .step-body p { font-size: 9.5px; color: var(--ink-300); line-height: 1.4; margin-top: 1px; display: none; }
 .step-body small { display: block; font-size: 9px; color: var(--ink-300); margin-top: 2px; }
-.step-line { position: absolute; left: 24px; right: 2px; top: 11px; height: 1px; background: var(--line-strong); }
+.step-line { flex: 1 1 16px; height: 1px; margin: 11px 10px 0; background: var(--line-strong); }
 .step.done .step-line { background: var(--brand-400); }
 .od-grid { display: grid; grid-template-columns: 1fr 300px; gap: 16px; margin-top: 14px; align-items: start; }
 .od-main { display: flex; flex-direction: column; gap: 14px; }
@@ -454,9 +454,9 @@ function contact() { ElMessage.info('农户服务热线：400-880-2026（演示�
 .logi-timeline b { font-size: 11.5px; }
 .logi-timeline p { font-size: 10px; color: var(--ink-400); line-height: 1.6; }
 .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; padding: 8px 20px 16px; }
-.info-grid div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px dashed #eef1e8; font-size: 10.5px; }
-.info-grid span { color: var(--ink-400); flex: 0 0 auto; }
-.info-grid b { font-weight: 500; text-align: right; }
+.info-grid div { display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: baseline; gap: 12px; padding: 7px 0; border-bottom: 1px dashed #eef1e8; font-size: 10.5px; }
+.info-grid span { color: var(--ink-400); white-space: nowrap; }
+.info-grid b { font-weight: 500; text-align: left; }
 .od-side { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 88px; }
 .side-card { padding: 16px 18px; }
 .sc-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }

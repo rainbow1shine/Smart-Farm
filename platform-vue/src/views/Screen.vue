@@ -323,9 +323,9 @@ onBeforeUnmount(() => { if (timer) clearInterval(timer) })
 .screen-page::after { content: ""; position: fixed; left: 50%; top: -30%; width: 800px; height: 600px; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(62, 160, 105, .16), transparent 68%); pointer-events: none; }
 .screen-header { display: flex; align-items: center; gap: 18px; padding: 4px 6px 12px; position: relative; z-index: 1; border-bottom: 1px solid rgba(94, 200, 140, .14); }
 .sh-left { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
-.sh-mark { width: 38px; height: 38px; border-radius: 10px; background: rgba(95, 227, 161, .12); border: 1px solid rgba(95, 227, 161, .24); display: grid; place-items: center; font-size: 18px; }
-.sh-left b { display: block; font-size: 12px; color: #e0f2e6; letter-spacing: .4px; }
-.sh-left span { display: block; font-size: 8px; letter-spacing: 1.3px; color: rgba(140, 190, 160, .55); }
+.sh-mark { width: 38px; height: 38px; border-radius: 10px; background: rgba(95, 227, 161, .12); border: 1px solid rgba(95, 227, 161, .24); display: grid; place-items: center; font-size: 18px; line-height: 1; color: #e8f8ee; letter-spacing: 0; }
+.sh-left > div b { display: block; font-size: 12px; color: #e0f2e6; letter-spacing: .4px; }
+.sh-left > div span { display: block; font-size: 8px; letter-spacing: 1.3px; color: rgba(140, 190, 160, .55); }
 .sh-title { flex: 1; display: flex; align-items: center; justify-content: center; gap: 16px; min-width: 0; }
 .sh-title h1 { font-size: 23px; letter-spacing: 3px; font-weight: 600; color: #e8f8ee; white-space: nowrap; text-shadow: 0 0 24px rgba(95, 227, 161, .28); }
 .sh-title .line { flex: 1; max-width: 180px; height: 1px; background: linear-gradient(90deg, transparent, rgba(95, 227, 161, .42), transparent); }
