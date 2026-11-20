@@ -567,7 +567,7 @@ function contact() { ElMessage.info('客服热线：400-880-2026（演示环境�
 .address-add .el-icon { font-size: 19px; }
 .address-add b { font-size: 11.5px; }
 .address-add span { font-size: 9.5px; }
-.msg-filters { display: flex; gap: 5px; padding: 0 20px 10px; flex-wrap: wrap; }
+.msg-filters { display: flex; gap: 5px; padding: 13px 20px 10px; flex-wrap: wrap; }
 .msg-filters button { border: 1px solid var(--line); background: #fff; border-radius: 20px; padding: 4px 12px; font-size: 10.5px; color: var(--ink-400); cursor: pointer; }
 .msg-filters button.on { background: var(--brand-600); border-color: var(--brand-600); color: #fff; }
 .msg-items { padding: 0 20px; }

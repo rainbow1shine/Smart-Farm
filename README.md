@@ -57,6 +57,38 @@
 
 手机框内展示消费者端核心流程，用于课程演示响应式与多端适配效果。
 
+### 5. 界面截图
+
+**登录 / 角色快捷体验**
+
+![登录页](docs/screenshots/01-login.png)
+
+**消费者商城首页**
+
+![商城首页](docs/screenshots/02-mall-home.png)
+
+**购物车与订单汇总**
+
+![购物车](docs/screenshots/03-cart.png)
+
+**个人中心**
+
+![个人中心](docs/screenshots/04-mall-profile.png)
+
+**运营后台工作台**
+
+![后台工作台](docs/screenshots/05-admin-dashboard.png)
+
+**GIS 园区地图**
+
+![GIS 园区地图](docs/screenshots/06-gis-map.png)
+
+**可视化大屏**
+
+![可视化大屏](docs/screenshots/07-screen.png)
+
+![可视化大屏概览](docs/screenshots/08-screen-overview.jpg)
+
 ---
 
 ## 三、技术栈

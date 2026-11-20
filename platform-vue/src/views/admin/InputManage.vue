@@ -160,7 +160,7 @@ const tabs = ['库存台账', '出入库流水', '农药使用台账']
 const tab = ref('库存台账')
 const flowOpen = ref(false)
 const flowType = ref('入库')
-const flowForm = reactive({ id: '', qty: 1, target: '', who: '李国强' })
+const flowForm = reactive({ id: '', qty: 1, target: '', who: '龙' })
 
 const columns = [
   { prop: 'name', label: '农资名称', minWidth: 190 },
@@ -199,7 +199,7 @@ function openFlow(type, id = '') {
   flowForm.id = id || inputs.value[0]?.id || ''
   flowForm.qty = 1
   flowForm.target = type === '入库' ? '供应商到货' : ''
-  flowForm.who = '李国强'
+  flowForm.who = '龙'
   flowOpen.value = true
 }
 function submitFlow() {

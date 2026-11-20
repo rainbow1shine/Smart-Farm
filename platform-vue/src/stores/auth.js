@@ -8,7 +8,7 @@ function localUser(account) {
   const preset = DEMO_ACCOUNTS.find(a => a.account.toLowerCase() === String(account).toLowerCase())
   if (!preset) return null
   const meta = ROLE_META[preset.role]
-  const names = { admin: '系统管理员', ops: '周运维', farmer: '李国强', agri: '陈农艺', consumer: '王双红' }
+  const names = { admin: '张', ops: '谭', farmer: '龙', agri: '朱', consumer: '王双红' }
   return {
     id: 'L-' + preset.role,
     account: preset.account,

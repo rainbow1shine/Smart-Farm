@@ -98,14 +98,14 @@ const DB = {
 
   /* 农事工单 */
   workorders: [
-    { id: 'WO-20261109-01', plot: 'DK-A01', type: '施肥', title: '番茄结果期水肥一体化追肥', plan: '2026-11-09', assignee: '李国强', status: '执行中', progress: 60, hours: 4.5, material: '硫酸钾 12kg、磷酸一铵 6kg' },
-    { id: 'WO-20261109-02', plot: 'DK-A02', type: '采收', title: '黄瓜第三批次采收', plan: '2026-11-09', assignee: '赵春燕', status: '待执行', progress: 0, hours: 0, material: '采收筐 40 个' },
-    { id: 'WO-20261109-03', plot: 'DK-C01', type: '打药', title: '草莓白粉病预防性喷药', plan: '2026-11-09', assignee: '王德福', status: '待执行', progress: 0, hours: 0, material: '醚菌酯 400g' },
-    { id: 'WO-20261108-01', plot: 'DK-B01', type: '灌溉', title: '水稻灌浆期补水', plan: '2026-11-08', assignee: '李国强', status: '已完成', progress: 100, hours: 3.0, material: '—' },
-    { id: 'WO-20261108-02', plot: 'DK-C02', type: '除草', title: '小白菜苗期人工除草', plan: '2026-11-08', assignee: '赵春燕', status: '已完成', progress: 100, hours: 5.5, material: '—' },
-    { id: 'WO-20261107-01', plot: 'DK-A02', type: '播种', title: '黄瓜补苗移栽', plan: '2026-11-07', assignee: '王德福', status: '已验收', progress: 100, hours: 6.0, material: '穴盘苗 320 株' },
-    { id: 'WO-20261106-01', plot: 'DK-D01', type: '投喂', title: '水产塘例行投喂与水质检查', plan: '2026-11-06', assignee: '李国强', status: '已验收', progress: 100, hours: 2.0, material: '配合饲料 80kg' },
-    { id: 'WO-20261109-04', plot: 'DK-E01', type: '巡检', title: '蛋鸡舍环境与产蛋巡检', plan: '2026-11-09', assignee: '王德福', status: '待执行', progress: 0, hours: 0, material: '—' },
+    { id: 'WO-20261109-01', plot: 'DK-A01', type: '施肥', title: '番茄结果期水肥一体化追肥', plan: '2026-11-09', assignee: '龙', status: '执行中', progress: 60, hours: 4.5, material: '硫酸钾 12kg、磷酸一铵 6kg' },
+    { id: 'WO-20261109-02', plot: 'DK-A02', type: '采收', title: '黄瓜第三批次采收', plan: '2026-11-09', assignee: '王', status: '待执行', progress: 0, hours: 0, material: '采收筐 40 个' },
+    { id: 'WO-20261109-03', plot: 'DK-C01', type: '打药', title: '草莓白粉病预防性喷药', plan: '2026-11-09', assignee: '张', status: '待执行', progress: 0, hours: 0, material: '醚菌酯 400g' },
+    { id: 'WO-20261108-01', plot: 'DK-B01', type: '灌溉', title: '水稻灌浆期补水', plan: '2026-11-08', assignee: '龙', status: '已完成', progress: 100, hours: 3.0, material: '—' },
+    { id: 'WO-20261108-02', plot: 'DK-C02', type: '除草', title: '小白菜苗期人工除草', plan: '2026-11-08', assignee: '王', status: '已完成', progress: 100, hours: 5.5, material: '—' },
+    { id: 'WO-20261107-01', plot: 'DK-A02', type: '播种', title: '黄瓜补苗移栽', plan: '2026-11-07', assignee: '张', status: '已验收', progress: 100, hours: 6.0, material: '穴盘苗 320 株' },
+    { id: 'WO-20261106-01', plot: 'DK-D01', type: '投喂', title: '水产塘例行投喂与水质检查', plan: '2026-11-06', assignee: '龙', status: '已验收', progress: 100, hours: 2.0, material: '配合饲料 80kg' },
+    { id: 'WO-20261109-04', plot: 'DK-E01', type: '巡检', title: '蛋鸡舍环境与产蛋巡检', plan: '2026-11-09', assignee: '张', status: '待执行', progress: 0, hours: 0, material: '—' },
   ],
 
   /* 农事计划模板 */
@@ -128,18 +128,18 @@ const DB = {
 
   /* 农资出入库流水 */
   inputFlow: [
-    { time: '2026-11-09 08:20', type: '出库', name: '硫酸钾复合肥', qty: 12, unit: '袋', target: 'DK-A01 追肥', who: '李国强' },
-    { time: '2026-11-08 16:10', type: '入库', name: '醚菌酯水分散粒剂', qty: 30, unit: '袋', target: '供应商到货', who: '赵春燕' },
-    { time: '2026-11-08 09:35', type: '出库', name: '黑色地膜', qty: 3, unit: '卷', target: 'DK-C02 覆盖', who: '王德福' },
-    { time: '2026-11-07 14:00', type: '出库', name: '育秧基质', qty: 8, unit: '袋', target: 'DK-A02 补苗', who: '赵春燕' },
-    { time: '2026-11-06 10:20', type: '入库', name: '磷酸一铵', qty: 15, unit: '袋', target: '供应商到货', who: '李国强' },
+    { time: '2026-11-09 08:20', type: '出库', name: '硫酸钾复合肥', qty: 12, unit: '袋', target: 'DK-A01 追肥', who: '龙' },
+    { time: '2026-11-08 16:10', type: '入库', name: '醚菌酯水分散粒剂', qty: 30, unit: '袋', target: '供应商到货', who: '王' },
+    { time: '2026-11-08 09:35', type: '出库', name: '黑色地膜', qty: 3, unit: '卷', target: 'DK-C02 覆盖', who: '张' },
+    { time: '2026-11-07 14:00', type: '出库', name: '育秧基质', qty: 8, unit: '袋', target: 'DK-A02 补苗', who: '王' },
+    { time: '2026-11-06 10:20', type: '入库', name: '磷酸一铵', qty: 15, unit: '袋', target: '供应商到货', who: '龙' },
   ],
 
   /* 农药使用台账 */
   pesticideLedger: [
-    { date: '2026-11-09', plot: 'DK-C01', name: '醚菌酯', dose: '400g/亩', crop: '草莓', operator: '王德福', safeDay: 7, residue: '待检测' },
-    { date: '2026-11-05', plot: 'DK-A01', name: '吡虫啉', dose: '50g/亩', crop: '番茄', operator: '李国强', safeDay: 10, residue: '合格' },
-    { date: '2026-10-28', plot: 'DK-C02', name: '高效氯氟氰菊酯', dose: '30ml/亩', crop: '小白菜', operator: '赵春燕', safeDay: 5, residue: '合格' },
+    { date: '2026-11-09', plot: 'DK-C01', name: '醚菌酯', dose: '400g/亩', crop: '草莓', operator: '张', safeDay: 7, residue: '待检测' },
+    { date: '2026-11-05', plot: 'DK-A01', name: '吡虫啉', dose: '50g/亩', crop: '番茄', operator: '龙', safeDay: 10, residue: '合格' },
+    { date: '2026-10-28', plot: 'DK-C02', name: '高效氯氟氰菊酯', dose: '30ml/亩', crop: '小白菜', operator: '王', safeDay: 5, residue: '合格' },
   ],
 
   /* 采收批次 */
@@ -194,11 +194,11 @@ const DB = {
 
   /* 农户订单 */
   orders: [
-    { no: 'DD-20261109-001', buyer: '刘女士', phone: '138****6621', goods: '永川粉贝贝番茄 × 2', amount: 25.6, time: '2026-11-09 09:02', status: '待发货', pay: '已支付', addr: '重庆市渝北区龙湖天街' },
-    { no: 'DD-20261109-002', buyer: '陈先生', phone: '135****8890', goods: '津优35水果黄瓜 × 3', amount: 28.8, time: '2026-11-09 08:41', status: '待发货', pay: '已支付', addr: '重庆市南岸区学府大道' },
+    { no: 'DD-20261109-001', buyer: '谭女士', phone: '138****6621', goods: '永川粉贝贝番茄 × 2', amount: 25.6, time: '2026-11-09 09:02', status: '待发货', pay: '已支付', addr: '重庆市渝北区龙湖天街' },
+    { no: 'DD-20261109-002', buyer: '吴先生', phone: '135****8890', goods: '津优35水果黄瓜 × 3', amount: 28.8, time: '2026-11-09 08:41', status: '待发货', pay: '已支付', addr: '重庆市南岸区学府大道' },
     { no: 'DD-20261108-003', buyer: '王女士', phone: '187****2233', goods: '璧山红颜草莓 × 4', amount: 128.0, time: '2026-11-08 20:15', status: '已发货', pay: '已支付', addr: '重庆市江北区观音桥' },
     { no: 'DD-20261108-004', buyer: '张先生', phone: '159****5512', goods: '南川宜香优大米 × 1', amount: 68.0, time: '2026-11-08 15:30', status: '已完成', pay: '已支付', addr: '重庆市九龙坡区' },
-    { no: 'DD-20261107-005', buyer: '李女士', phone: '136****9901', goods: '璧山小白菜 × 2、番茄 × 1', amount: 23.2, time: '2026-11-07 11:20', status: '已完成', pay: '已支付', addr: '重庆市沙坪坝区' },
+    { no: 'DD-20261107-005', buyer: '朱女士', phone: '136****9901', goods: '璧山小白菜 × 2、番茄 × 1', amount: 23.2, time: '2026-11-07 11:20', status: '已完成', pay: '已支付', addr: '重庆市沙坪坝区' },
   ],
 
   /* 消费者订单（商城端） */
@@ -221,12 +221,12 @@ const DB = {
 
   /* 控制日志 */
   controlLogs: [
-    { time: '2026-11-09 08:20', who: '李国强', dev: 'A01环流风机1号', action: '开启', mode: '手动', result: '成功' },
+    { time: '2026-11-09 08:20', who: '龙', dev: 'A01环流风机1号', action: '开启', mode: '手动', result: '成功' },
     { time: '2026-11-09 07:10', who: '系统策略', dev: 'B01水泵机组', action: '开启', mode: '自动联动', result: '成功' },
     { time: '2026-11-09 06:30', who: '系统策略', dev: 'A01灌溉电磁阀', action: '关闭', mode: '定时任务', result: '成功' },
     { time: '2026-11-09 05:00', who: '系统策略', dev: 'D01增氧机1号', action: '开启', mode: '定时任务', result: '成功' },
-    { time: '2026-11-08 21:40', who: '王德福', dev: 'A01 LED补光灯', action: '开启', mode: '手动', result: '失败（设备离线）' },
-    { time: '2026-11-08 20:05', who: '赵春燕', dev: 'A02卷帘机', action: '关闭', mode: '手动', result: '成功' },
+    { time: '2026-11-08 21:40', who: '张', dev: 'A01 LED补光灯', action: '开启', mode: '手动', result: '失败（设备离线）' },
+    { time: '2026-11-08 20:05', who: '王', dev: 'A02卷帘机', action: '关闭', mode: '手动', result: '成功' },
   ],
 
   /* 自动联动策略 */
@@ -288,15 +288,15 @@ const DB = {
 
   /* 用户 */
   users: [
-    { id: 'U001', account: 'admin', name: '系统管理员', gender: '男', phone: '13800001111', park: '平台中心', role: '管理员', status: '启用', last: '2026-11-09 08:30' },
-    { id: 'U002', account: 'ops01', name: '周运维', gender: '男', phone: '13800002222', park: '永川智慧农业示范园', role: '运维', status: '启用', last: '2026-11-09 08:05' },
-    { id: 'U003', account: 'farmer01', name: '李国强', gender: '男', phone: '13800003333', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 07:10' },
-    { id: 'U004', account: 'farmer02', name: '赵春燕', gender: '女', phone: '13800004444', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 08:12' },
-    { id: 'U005', account: 'farmer03', name: '王德福', gender: '男', phone: '13800005555', park: '璧山蔬菜保供基地', role: '农户', status: '启用', last: '2026-11-08 17:40' },
-    { id: 'U006', account: 'agri01', name: '陈农艺', gender: '女', phone: '13800006666', park: '全园区', role: '农艺技术人员', status: '启用', last: '2026-11-09 09:00' },
-    { id: 'U007', account: 'agri02', name: '张植保', gender: '男', phone: '13800007777', park: '南川大观生态农业园', role: '农艺技术人员', status: '启用', last: '2026-11-09 08:48' },
-    { id: 'U008', account: 'user001', name: '刘女士', gender: '女', phone: '13866626621', park: '—', role: '消费者', status: '启用', last: '2026-11-09 09:02' },
-    { id: 'U009', account: 'user002', name: '陈先生', gender: '男', phone: '13566668890', park: '—', role: '消费者', status: '停用', last: '2026-10-22 20:30' },
+    { id: 'U001', account: 'admin', name: '张', gender: '男', phone: '13800001111', park: '平台中心', role: '管理员', status: '启用', last: '2026-11-09 08:30' },
+    { id: 'U002', account: 'ops01', name: '谭', gender: '男', phone: '13800002222', park: '永川智慧农业示范园', role: '运维', status: '启用', last: '2026-11-09 08:05' },
+    { id: 'U003', account: 'farmer01', name: '龙', gender: '男', phone: '13800003333', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 07:10' },
+    { id: 'U004', account: 'farmer02', name: '王', gender: '女', phone: '13800004444', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 08:12' },
+    { id: 'U005', account: 'farmer03', name: '张', gender: '男', phone: '13800005555', park: '璧山蔬菜保供基地', role: '农户', status: '启用', last: '2026-11-08 17:40' },
+    { id: 'U006', account: 'agri01', name: '朱', gender: '女', phone: '13800006666', park: '全园区', role: '农艺技术人员', status: '启用', last: '2026-11-09 09:00' },
+    { id: 'U007', account: 'agri02', name: '王', gender: '男', phone: '13800007777', park: '南川大观生态农业园', role: '农艺技术人员', status: '启用', last: '2026-11-09 08:48' },
+    { id: 'U008', account: 'user001', name: '谭女士', gender: '女', phone: '13866626621', park: '—', role: '消费者', status: '启用', last: '2026-11-09 09:02' },
+    { id: 'U009', account: 'user002', name: '吴先生', gender: '男', phone: '13566668890', park: '—', role: '消费者', status: '停用', last: '2026-10-22 20:30' },
   ],
 
   /* 角色 */
@@ -320,10 +320,10 @@ const DB = {
 
   /* 日志 */
   logs: [
-    { time: '2026-11-09 09:02', user: '刘女士', role: '消费者', ip: '117.139.21.9', action: '提交订单 DD-20261109-001', type: '操作日志', result: '成功' },
-    { time: '2026-11-09 08:30', user: '系统管理员', role: '管理员', ip: '10.20.0.9', action: '登录平台', type: '登录日志', result: '成功' },
-    { time: '2026-11-09 08:20', user: '李国强', role: '农户', ip: '10.20.3.41', action: '开启 A01 环流风机1号', type: '操作日志', result: '成功' },
-    { time: '2026-11-09 08:05', user: '周运维', role: '运维', ip: '10.20.0.21', action: '登录平台', type: '登录日志', result: '成功' },
+    { time: '2026-11-09 09:02', user: '谭女士', role: '消费者', ip: '117.139.21.9', action: '提交订单 DD-20261109-001', type: '操作日志', result: '成功' },
+    { time: '2026-11-09 08:30', user: '张', role: '管理员', ip: '10.20.0.9', action: '登录平台', type: '登录日志', result: '成功' },
+    { time: '2026-11-09 08:20', user: '龙', role: '农户', ip: '10.20.3.41', action: '开启 A01 环流风机1号', type: '操作日志', result: '成功' },
+    { time: '2026-11-09 08:05', user: '谭', role: '运维', ip: '10.20.0.21', action: '登录平台', type: '登录日志', result: '成功' },
     { time: '2026-11-09 07:40', user: '未知账号', role: '—', ip: '45.132.8.66', action: '尝试登录失败（密码错误）', type: '登录日志', result: '失败' },
     { time: '2026-11-08 22:15', user: '系统', role: '—', ip: '—', action: '生成告警 AL-0912', type: '系统日志', result: '成功' },
   ],
@@ -339,23 +339,23 @@ const DB = {
 
   /* 农技：病虫害问诊 */
   pestCases: [
-    { id: 'PC-001', plot: 'C区草莓园', crop: '草莓', reporter: '王德福', question: '叶片背面出现白色粉状霉层，果实表面也有一层白粉，近两天湿度较高', images: 3, status: '待复核', time: '2026-11-09 08:26', ai: '白粉病（置信度 87%）' },
-    { id: 'PC-002', plot: 'A区1号连栋大棚', crop: '番茄', reporter: '李国强', question: '下部老叶出现褐色同心轮纹病斑，边缘有黄色晕圈', images: 2, status: '已诊断', time: '2026-11-08 09:15', ai: '早疫病（置信度 42%）' },
-    { id: 'PC-003', plot: 'B区2号大田', crop: '玉米', reporter: '赵春燕', question: '心叶展开后有排孔状被害，茎秆上有虫粪', images: 2, status: '已诊断', time: '2026-11-07 16:40', ai: '玉米螟（置信度 68%）' },
+    { id: 'PC-001', plot: 'C区草莓园', crop: '草莓', reporter: '张', question: '叶片背面出现白色粉状霉层，果实表面也有一层白粉，近两天湿度较高', images: 3, status: '待复核', time: '2026-11-09 08:26', ai: '白粉病（置信度 87%）' },
+    { id: 'PC-002', plot: 'A区1号连栋大棚', crop: '番茄', reporter: '龙', question: '下部老叶出现褐色同心轮纹病斑，边缘有黄色晕圈', images: 2, status: '已诊断', time: '2026-11-08 09:15', ai: '早疫病（置信度 42%）' },
+    { id: 'PC-003', plot: 'B区2号大田', crop: '玉米', reporter: '王', question: '心叶展开后有排孔状被害，茎秆上有虫粪', images: 2, status: '已诊断', time: '2026-11-07 16:40', ai: '玉米螟（置信度 68%）' },
   ],
 
   /* 农技：技术方案 */
   techPlans: [
-    { id: 'TP-001', plot: 'A区1号连栋大棚', crop: '番茄', stage: '结果期', type: '施肥方案', content: '硫酸钾 12kg/亩 + 磷酸一铵 6kg/亩，随水施入，7 天 1 次，连续 3 次', author: '陈农艺', status: '已下发', time: '2026-11-08' },
-    { id: 'TP-002', plot: 'C区草莓园', crop: '草莓', stage: '开花期', type: '病虫害防治', content: '醚菌酯 400g/亩 预防性喷施，重点喷叶背，安全间隔期 7 天', author: '张植保', status: '已下发', time: '2026-11-08' },
-    { id: 'TP-003', plot: 'B区2号大田', crop: '玉米', stage: '成熟期', type: '水分管理', content: '停止灌溉，保持田间持水量 60%，雨后及时排水', author: '陈农艺', status: '草稿', time: '2026-11-09' },
+    { id: 'TP-001', plot: 'A区1号连栋大棚', crop: '番茄', stage: '结果期', type: '施肥方案', content: '硫酸钾 12kg/亩 + 磷酸一铵 6kg/亩，随水施入，7 天 1 次，连续 3 次', author: '朱', status: '已下发', time: '2026-11-08' },
+    { id: 'TP-002', plot: 'C区草莓园', crop: '草莓', stage: '开花期', type: '病虫害防治', content: '醚菌酯 400g/亩 预防性喷施，重点喷叶背，安全间隔期 7 天', author: '王', status: '已下发', time: '2026-11-08' },
+    { id: 'TP-003', plot: 'B区2号大田', crop: '玉米', stage: '成熟期', type: '水分管理', content: '停止灌溉，保持田间持水量 60%，雨后及时排水', author: '朱', status: '草稿', time: '2026-11-09' },
   ],
 
   /* 农技：工单督导记录 */
   supervise: [
-    { wo: 'WO-20261109-01', plot: 'DK-A01', title: '番茄结果期水肥一体化追肥', exec: '李国强', check: '配比正确、施入均匀', problem: '—', advice: '建议补充微量元素硼、钙，防止脐腐病', status: '合格', time: '2026-11-09 10:15' },
-    { wo: 'WO-20261108-01', plot: 'DK-B01', title: '水稻灌浆期补水', exec: '李国强', check: '水位控制合理', problem: '局部田块水层偏深 3cm', advice: '适当退水，避免根系缺氧早衰', status: '需整改', time: '2026-11-08 15:20' },
-    { wo: 'WO-20261107-01', plot: 'DK-A02', title: '黄瓜补苗移栽', exec: '王德福', check: '株距 35cm、浇定根水', problem: '有 12 株未浇透', advice: '补浇定根水，3 天内观察缓苗情况', status: '合格', time: '2026-11-07 16:40' },
+    { wo: 'WO-20261109-01', plot: 'DK-A01', title: '番茄结果期水肥一体化追肥', exec: '龙', check: '配比正确、施入均匀', problem: '—', advice: '建议补充微量元素硼、钙，防止脐腐病', status: '合格', time: '2026-11-09 10:15' },
+    { wo: 'WO-20261108-01', plot: 'DK-B01', title: '水稻灌浆期补水', exec: '龙', check: '水位控制合理', problem: '局部田块水层偏深 3cm', advice: '适当退水，避免根系缺氧早衰', status: '需整改', time: '2026-11-08 15:20' },
+    { wo: 'WO-20261107-01', plot: 'DK-A02', title: '黄瓜补苗移栽', exec: '张', check: '株距 35cm、浇定根水', problem: '有 12 株未浇透', advice: '补浇定根水，3 天内观察缓苗情况', status: '合格', time: '2026-11-07 16:40' },
   ],
 
   /* 大屏数据 */
@@ -386,22 +386,22 @@ DB.reviews = [
 
 DB.messages = [
   { id: 'M1', type: '订单', title: '订单已发货', text: '你的「永川粉贝贝番茄 × 2」已由产地发出，预计明日 10:00 前送达。', time: '11-10 07:20', read: false },
-  { id: 'M2', type: '评价', title: '评价回复提醒', text: '农户「李国强」回复了你的评价：感谢支持！新米下周还有一批。', time: '11-09 21:02', read: false },
+  { id: 'M2', type: '评价', title: '评价回复提醒', text: '农户「龙」回复了你的评价：感谢支持！新米下周还有一批。', time: '11-09 21:02', read: false },
   { id: 'M3', type: '活动', title: '本周新品上架', text: '璧山红颜草莓进入盛果期，限时 9 折，冷链次日达。', time: '11-08 09:00', read: false },
   { id: 'M4', type: '系统', title: '溯源信息已更新', text: '你购买的大米批次 TR-00021 新增农残检测报告，可在「产品溯源」查看。', time: '11-07 16:40', read: true }
 ];
 
 DB.consults = [
   {
-    id: 'CS-001', from: '李国强', role: '农户', plot: 'A区1号连栋大棚', title: '番茄下部叶片发黄',
+    id: 'CS-001', from: '龙', role: '农户', plot: 'A区1号连栋大棚', title: '番茄下部叶片发黄',
     content: '最近三天番茄下部老叶发黄，叶脉还是绿的，棚内湿度 75% 左右，请问是缺镁还是病害？',
     time: '2026-11-09 08:40', status: '待回复', reply: '',
     messages: [
-      { from: 'farmer', text: '陈老师，最近三天番茄下部老叶发黄，叶脉还是绿的，棚内湿度 75% 左右，是缺镁还是病害？', time: '2026-11-09 08:40' }
+      { from: 'farmer', text: '龙老师，最近三天番茄下部老叶发黄，叶脉还是绿的，棚内湿度 75% 左右，是缺镁还是病害？', time: '2026-11-09 08:40' }
     ]
   },
   {
-    id: 'CS-002', from: '王德福', role: '农户', plot: 'C区草莓园', title: '草莓白粉病用药建议',
+    id: 'CS-002', from: '张', role: '农户', plot: 'C区草莓园', title: '草莓白粉病用药建议',
     content: '草莓叶片背面有白色粉状物，已经用了一次醚菌酯，还需要补喷吗？',
     time: '2026-11-08 17:10', status: '已回复',
     reply: '间隔 7 天后再补喷一次，重点喷叶背，注意采收安全间隔期。',
@@ -424,14 +424,14 @@ DB.afterSales = [
 
 DB.consumers = [
   { id: 'CU-001', name: '王双红', phone: '187****2233', level: '青梅会员', orders: 3, spend: 221.6, status: '正常', reg: '2026-08-12', warn: 0 },
-  { id: 'CU-002', name: '刘女士', phone: '138****6621', level: '新芽会员', orders: 1, spend: 25.6, status: '正常', reg: '2026-10-03', warn: 0 },
-  { id: 'CU-003', name: '陈先生', phone: '135****8890', level: '新芽会员', orders: 1, spend: 28.8, status: '已警告', reg: '2026-09-18', warn: 1 }
+  { id: 'CU-002', name: '谭女士', phone: '138****6621', level: '新芽会员', orders: 1, spend: 25.6, status: '正常', reg: '2026-10-03', warn: 0 },
+  { id: 'CU-003', name: '吴先生', phone: '135****8890', level: '新芽会员', orders: 1, spend: 28.8, status: '已警告', reg: '2026-09-18', warn: 1 }
 ];
 
 DB.repairs = [
-  { id: 'RP-001', dev: 'A01 LED补光灯', plot: 'A区1号连栋大棚', reporter: '李国强', desc: '补光灯无法启动，配电箱指示灯不亮', level: '紧急', status: '待接单', time: '2026-11-09 08:56', assignee: '—' },
-  { id: 'RP-002', dev: 'C01 育苗补光板', plot: 'C区草莓园', reporter: '王德福', desc: '设备上报电源异常，已停止工作', level: '重要', status: '维修中', time: '2026-11-09 08:12', assignee: '周运维' },
-  { id: 'RP-003', dev: 'B01 气象站', plot: 'B区露天大田', reporter: '赵春燕', desc: '风向数据跳变，疑似传感器松动', level: '一般', status: '已完成', time: '2026-11-08 18:10', assignee: '周运维' }
+  { id: 'RP-001', dev: 'A01 LED补光灯', plot: 'A区1号连栋大棚', reporter: '龙', desc: '补光灯无法启动，配电箱指示灯不亮', level: '紧急', status: '待接单', time: '2026-11-09 08:56', assignee: '—' },
+  { id: 'RP-002', dev: 'C01 育苗补光板', plot: 'C区草莓园', reporter: '张', desc: '设备上报电源异常，已停止工作', level: '重要', status: '维修中', time: '2026-11-09 08:12', assignee: '谭' },
+  { id: 'RP-003', dev: 'B01 气象站', plot: 'B区露天大田', reporter: '王', desc: '风向数据跳变，疑似传感器松动', level: '一般', status: '已完成', time: '2026-11-08 18:10', assignee: '谭' }
 ];
 
 DB.backups = [
