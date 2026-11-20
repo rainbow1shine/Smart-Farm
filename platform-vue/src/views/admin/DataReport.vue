@@ -282,7 +282,7 @@ function print() { window.print() }
 .tab:hover { background: var(--brand-50); color: var(--brand-700); }
 .tab.on { background: var(--brand-600); color: #fff; font-weight: 600; }
 .tabs-bar .muted { margin-left: auto; }
-.chart-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.chart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .chart-grid .span-2 { grid-column: span 2; }
 .chart-grid .span-3 { grid-column: span 3; }
 .kpi-list { padding: 6px 16px 12px; }

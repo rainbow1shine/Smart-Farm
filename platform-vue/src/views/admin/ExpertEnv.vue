@@ -127,11 +127,11 @@ function refresh() { ElMessage.success('环境数据已刷新') }
 
 <style scoped>
 .plot-select { width: 220px; }
-.env-hero { display: flex; align-items: center; gap: 20px; padding: 20px 24px; margin-bottom: 16px; background: linear-gradient(120deg, #2e5137, #47754c 60%, #6c9667); color: #e8f2e5; border: none; }
+.env-hero { display: flex; align-items: center; gap: 20px; padding: 20px 24px; margin-bottom: 16px; background: linear-gradient(120deg, #3d7a49, #559257 60%, #7bab74); color: #edf7e8; border: none; }
 .eh-main { flex: 1; }
-.eh-kicker { font-size: 11px; color: #b4d2b3; }
+.eh-kicker { font-size: 11px; color: #cfe7c8; }
 .env-hero h2 { font-size: 22px; color: #fff; margin: 4px 0; }
-.env-hero p { font-size: 12.5px; color: #c3dbc2; }
+.env-hero p { font-size: 12.5px; color: #e1f0da; }
 .eh-tags { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
 .eh-tags .soft-tag { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.18); color: #dcefd8; }
 .eh-weather { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15); border-radius: 14px; padding: 13px 16px; }

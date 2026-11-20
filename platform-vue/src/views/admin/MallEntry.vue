@@ -115,17 +115,17 @@ const admin = useAdminStore()
 </script>
 
 <style scoped>
-.mall-hero { display: flex; align-items: center; gap: 30px; padding: 28px 34px; border-radius: 22px; background: linear-gradient(125deg, #2c4f36, #47754c 55%, #6c9667); color: #e8f2e5; margin-bottom: 16px; overflow: hidden; position: relative; }
+.mall-hero { display: flex; align-items: center; gap: 30px; padding: 28px 34px; border-radius: 22px; background: linear-gradient(125deg, #3d7a49, #559257 55%, #7bab74); color: #edf7e8; margin-bottom: 16px; overflow: hidden; position: relative; }
 .mall-hero::after { content: ""; position: absolute; right: -90px; bottom: -140px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(220,242,190,.16), transparent 65%); }
 .mh-copy { flex: 1; position: relative; z-index: 1; }
-.mh-kicker { font-size: 10px; letter-spacing: 2px; color: #b4d2b3; }
+.mh-kicker { font-size: 10px; letter-spacing: 2px; color: #c8e6c0; }
 .mh-copy h1 { font-size: 30px; line-height: 1.3; color: #fff; margin: 9px 0 8px; letter-spacing: .5px; }
-.mh-copy p { font-size: 12px; color: #c3dbc2; line-height: 1.85; max-width: 560px; }
+.mh-copy p { font-size: 12px; color: #e1f0da; line-height: 1.85; max-width: 560px; }
 .mh-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 .mh-actions :deep(.el-button--primary) { --el-button-bg-color: #d7e9bf; --el-button-border-color: #d7e9bf; --el-button-text-color: #2e5137; }
 .mh-actions :deep(.el-button:not(.el-button--primary)) { --el-button-bg-color: rgba(255,255,255,.1); --el-button-border-color: rgba(255,255,255,.22); --el-button-text-color: #e8f2e5; }
 .mh-chips { display: flex; gap: 6px; margin-top: 16px; flex-wrap: wrap; }
-.mh-chips span { font-size: 10.5px; border: 1px solid rgba(255,255,255,.16); border-radius: 20px; padding: 3px 9px; color: #b8d3b7; }
+.mh-chips span { font-size: 10.5px; border: 1px solid rgba(255,255,255,.28); border-radius: 20px; padding: 3px 9px; color: #e4f2dc; }
 .mh-phone { position: relative; z-index: 1; flex: 0 0 235px; }
 .phone-frame { width: 235px; height: 430px; border-radius: 30px; background: #14261a; padding: 9px; box-shadow: 0 24px 50px rgba(10, 25, 15, .35); position: relative; }
 .phone-notch { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 70px; height: 6px; border-radius: 4px; background: #0d1a12; z-index: 3; }

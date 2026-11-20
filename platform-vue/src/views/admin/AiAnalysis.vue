@@ -175,17 +175,17 @@ function refresh() { ElMessage.success('分析结果已更新') }
 </script>
 
 <style scoped>
-.ai-hero { display: flex; align-items: center; gap: 18px; padding: 20px 24px; margin-bottom: 16px; background: linear-gradient(120deg, #243f2c, #3d6547 58%, #6c9667); color: #e8f2e5; border: none; flex-wrap: wrap; }
-.ah-icon { width: 54px; height: 54px; border-radius: 15px; background: rgba(255,255,255,.12); display: grid; place-items: center; font-size: 27px; flex: 0 0 54px; }
+.ai-hero { display: flex; align-items: center; gap: 18px; padding: 20px 24px; margin-bottom: 16px; background: linear-gradient(120deg, #3d7a49, #559257 58%, #7bab74); color: #edf7e8; border: none; flex-wrap: wrap; }
+.ah-icon { width: 54px; height: 54px; border-radius: 15px; background: rgba(255,255,255,.16); display: grid; place-items: center; font-size: 27px; flex: 0 0 54px; }
 .ah-main { flex: 1; min-width: 260px; }
-.ah-kicker { font-size: 10px; color: #b4d2b3; letter-spacing: .4px; }
+.ah-kicker { font-size: 10px; color: #d3ecc9; letter-spacing: .4px; }
 .ai-hero h2 { font-size: 17px; color: #fff; margin: 5px 0; font-weight: 500; }
-.ai-hero h2 b { color: #e2f3b9; }
-.ai-hero p { font-size: 11.5px; color: #bdd6bd; line-height: 1.7; }
+.ai-hero h2 b { color: #eef8c8; }
+.ai-hero p { font-size: 11.5px; color: #e1f0da; line-height: 1.7; }
 .ah-stats { display: flex; gap: 22px; }
 .ah-stats > div { text-align: center; }
 .ah-stats b { display: block; font-size: 20px; color: #fff; }
-.ah-stats span { font-size: 10px; color: #b4d2b3; }
+.ah-stats span { font-size: 10px; color: #d3ecc9; }
 .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
 .tabs-bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin-bottom: 14px; flex-wrap: wrap; }
 .tabs { display: flex; gap: 4px; flex-wrap: wrap; }

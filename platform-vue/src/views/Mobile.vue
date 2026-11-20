@@ -41,16 +41,149 @@
 
             <div class="app-head">
               <div class="ah-brand">
-                <span class="ah-mark">🌾</span>
-                <div><b>鲜农商城</b><small>产地直供 · 当日现摘</small></div>
+                <span class="ah-mark">{{ isStaff ? '🧭' : '🌾' }}</span>
+                <div>
+                  <b>{{ isStaff ? '鲜农移动办公' : '鲜农商城' }}</b>
+                  <small>{{ isStaff ? '田间与管理 · 随时处理' : '产地直供 · 当日现摘' }}</small>
+                </div>
               </div>
               <div class="ah-icons">
                 <span @click="notify">🔔</span>
-                <span class="cart" @click="goCart">🛒<i v-if="cart.count">{{ cart.count }}</i></span>
+                <span v-if="!isStaff" class="cart" @click="goCart">🛒<i v-if="cart.count">{{ cart.count }}</i></span>
               </div>
             </div>
 
             <div class="app-body">
+              <!-- 农户 / 运维：移动办公 -->
+              <template v-if="isStaff">
+                <template v-if="activeTab === 'home'">
+                  <div class="m-work-hero">
+                    <span>{{ staffRoleName }} · 移动工作台</span>
+                    <b>{{ greeting }}，{{ auth.user?.name || '同事' }}</b>
+                    <small>{{ isAgri ? `${pendingConsults.length} 条农户咨询待回复` : isFarmer ? `今日 ${pendingWorkorders.length} 项农事待处理` : `${offlineDevices.length} 台设备离线待排查` }}</small>
+                  </div>
+                  <div class="m-work-stats">
+                    <template v-if="isAgri">
+                      <div><b>{{ pendingConsults.length }}</b><span>待回复</span></div>
+                      <div><b>{{ admin.consults.length }}</b><span>累计咨询</span></div>
+                      <div><b>{{ admin.strategies.length }}</b><span>技术方案</span></div>
+                    </template>
+                    <template v-else>
+                      <div><b>{{ pendingWorkorders.length }}</b><span>待办工单</span></div>
+                      <div><b>{{ staffAlarms.length }}</b><span>待处置告警</span></div>
+                      <div><b>{{ onlineRate }}%</b><span>设备在线</span></div>
+                    </template>
+                  </div>
+                  <div class="m-work-actions">
+                    <button v-for="a in staffActions" :key="a.label" @click="onStaffAction(a)">
+                      <span>{{ a.icon }}</span><b>{{ a.label }}</b>
+                    </button>
+                  </div>
+                  <div class="m-section-head">
+                    <b>{{ isAgri ? '待回复咨询' : isFarmer ? '今日农事' : '设备异常' }}</b>
+                    <span @click="activeTab = 'tasks'">全部 ›</span>
+                  </div>
+                  <div class="m-work-list">
+                    <template v-if="isAgri">
+                      <div v-for="c in pendingConsults.slice(0, 4)" :key="c.id" class="m-work-item">
+                        <span class="mwi-dot"></span>
+                        <div><b>{{ c.title }}</b><small>{{ c.from }} · {{ c.plot }}</small></div>
+                        <em>{{ c.status }}</em>
+                      </div>
+                      <div v-if="!pendingConsults.length" class="m-empty">暂无待回复咨询</div>
+                    </template>
+                    <template v-else>
+                      <div v-for="w in (isFarmer ? myWorkorders : offlineDevices)" :key="w.id" class="m-work-item">
+                        <span class="mwi-dot"></span>
+                        <div>
+                          <b>{{ isFarmer ? w.title : w.name }}</b>
+                          <small>{{ isFarmer ? `${plotName(w.plot)} · ${w.status}` : `${plotName(w.plot)} · 离线` }}</small>
+                        </div>
+                        <em v-if="isFarmer">{{ w.progress }}%</em>
+                      </div>
+                      <div v-if="!(isFarmer ? myWorkorders.length : offlineDevices.length)" class="m-empty">暂无待处理事项</div>
+                    </template>
+                  </div>
+                </template>
+
+                <template v-else-if="activeTab === 'tasks'">
+                  <div class="m-sub-head"><b>{{ isAgri ? '农户咨询' : isFarmer ? '农事工单' : '设备列表' }}</b></div>
+                  <div v-if="isAgri" class="m-work-list">
+                    <div v-for="c in agriConsults" :key="c.id" class="m-work-item">
+                      <span class="mwi-dot" :class="{ off: c.status === '已回复' }"></span>
+                      <div><b>{{ c.title }}</b><small>{{ c.from }} · {{ c.plot }} · {{ c.time.slice(5) }}</small></div>
+                      <em :class="{ off: c.status === '已回复' }">{{ c.status }}</em>
+                    </div>
+                    <div v-if="!agriConsults.length" class="m-empty">暂无农户咨询</div>
+                  </div>
+                  <div v-else-if="isFarmer" class="m-work-list">
+                    <div v-for="w in pendingWorkorders" :key="w.id" class="m-work-item">
+                      <span class="mwi-dot"></span>
+                      <div><b>{{ w.title }}</b><small>{{ plotName(w.plot) }} · {{ w.type }} · {{ w.status }}</small></div>
+                      <em>{{ w.progress }}%</em>
+                    </div>
+                    <div v-if="!pendingWorkorders.length" class="m-empty">今日工单已全部完成</div>
+                  </div>
+                  <div v-else class="m-work-list">
+                    <div v-for="d in admin.devices" :key="d.id" class="m-work-item">
+                      <span class="mwi-dot" :class="{ off: !d.online }"></span>
+                      <div><b>{{ d.name }}</b><small>{{ plotName(d.plot) }} · {{ d.status }}</small></div>
+                      <em :class="{ off: !d.online }">{{ d.online ? '在线' : '离线' }}</em>
+                    </div>
+                  </div>
+                </template>
+
+                <template v-else-if="activeTab === 'plans'">
+                  <div class="m-sub-head"><b>技术方案</b></div>
+                  <div class="m-work-list">
+                    <div v-for="s in admin.strategies" :key="s.id" class="m-work-item">
+                      <span class="mwi-dot" :class="{ off: !s.on }"></span>
+                      <div><b>{{ s.name }}</b><small>{{ plotName(s.plot) }} · {{ s.cond }}</small></div>
+                      <em :class="{ off: !s.on }">{{ s.on ? '启用' : '停用' }}</em>
+                    </div>
+                    <div v-if="!admin.strategies.length" class="m-empty">暂无技术方案</div>
+                  </div>
+                </template>
+
+                <template v-else-if="activeTab === 'alarms'">
+                  <div class="m-sub-head"><b>实时告警</b></div>
+                  <div class="m-work-list">
+                    <div v-for="a in staffAlarms" :key="a.id" class="m-work-item">
+                      <span class="mwi-dot" :class="{ off: a.level === '紧急' }"></span>
+                      <div><b>{{ a.target }}</b><small>{{ a.desc }}</small></div>
+                      <em>{{ a.level }}</em>
+                    </div>
+                    <div v-if="!staffAlarms.length" class="m-empty">暂无待处置告警</div>
+                  </div>
+                </template>
+
+                <template v-else>
+                  <div class="m-profile-head">
+                    <div class="mp-avatar">{{ auth.user?.name?.slice(0, 1) || '农' }}</div>
+                    <div><b>{{ auth.user?.name || '同事' }}</b><span>{{ staffRoleName }} · 移动办公</span></div>
+                  </div>
+                  <div class="m-profile-stats">
+                    <template v-if="isAgri">
+                      <div><b>{{ pendingConsults.length }}</b><span>待回复</span></div>
+                      <div><b>{{ admin.consults.length }}</b><span>咨询</span></div>
+                      <div><b>{{ admin.strategies.length }}</b><span>方案</span></div>
+                    </template>
+                    <template v-else>
+                      <div><b>{{ pendingWorkorders.length }}</b><span>待办工单</span></div>
+                      <div><b>{{ staffAlarms.length }}</b><span>告警</span></div>
+                      <div><b>{{ onlineRate }}%</b><span>设备在线</span></div>
+                    </template>
+                  </div>
+                  <div class="m-menu">
+                    <button @click="$router.push('/admin/dashboard')"><span>🖥️</span><b>进入网页后台</b><em>完整管理功能</em><i>›</i></button>
+                    <button @click="logoutStaff"><span>🚪</span><b>退出登录</b><em>切换账号</em><i>›</i></button>
+                  </div>
+                  <div class="m-profile-tip">🌾 田间移动办公 · 数据与后台实时同步</div>
+                </template>
+              </template>
+
+              <!-- 消费者：商城 -->
+              <template v-else>
               <template v-if="activeTab === 'home'">
                 <div class="m-hero">
                   <div class="mh-copy">
@@ -203,6 +336,7 @@
                 </div>
                 <div class="m-profile-tip">🌾 产地直供 · 农残检测 · 坏果包赔</div>
               </template>
+              </template>
             </div>
 
             <nav class="app-tabbar">
@@ -219,7 +353,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
@@ -227,12 +361,14 @@ import AppLogo from '@/components/AppLogo.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { useMallStore } from '@/stores/mall'
+import { useAdminStore } from '@/stores/admin'
 import DB from '@/data/db'
 
 const router = useRouter()
 const auth = useAuthStore()
 const cart = useCartStore()
 const mall = useMallStore()
+const admin = useAdminStore()
 
 const activeTab = ref('home')
 const selectedGoods = ref(null)
@@ -241,12 +377,98 @@ const cat = ref('全部')
 const traceCode = ref('TR-00021')
 const traceInfo = ref(DB.traces.find(t => t.code === 'TR-00021') || DB.traces[0])
 
-const tabs = [
+const consumerTabs = [
   { key: 'home', label: '首页', icon: '🏠' },
   { key: 'products', label: '产品', icon: '🧺' },
   { key: 'trace', label: '溯源', icon: '🔎' },
   { key: 'profile', label: '我的', icon: '👤' }
 ]
+/* 农户 / 运维 / 农艺进入移动办公，不展示商城 */
+const isStaff = computed(() => ['farmer', 'ops', 'agri'].includes(auth.user?.role))
+const isFarmer = computed(() => auth.user?.role === 'farmer')
+const isAgri = computed(() => auth.user?.role === 'agri')
+const staffRoleName = computed(() => (isFarmer.value ? '农户' : isAgri.value ? '农艺技术' : '运维'))
+const tabs = computed(() => {
+  if (isFarmer.value) {
+    return [
+      { key: 'home', label: '工作台', icon: '🧭' },
+      { key: 'tasks', label: '工单', icon: '📋' },
+      { key: 'alarms', label: '告警', icon: '🔔' },
+      { key: 'profile', label: '我的', icon: '👤' }
+    ]
+  }
+  if (isAgri.value) {
+    return [
+      { key: 'home', label: '工作台', icon: '🧭' },
+      { key: 'tasks', label: '咨询', icon: '💬' },
+      { key: 'plans', label: '方案', icon: '📘' },
+      { key: 'profile', label: '我的', icon: '👤' }
+    ]
+  }
+  return isStaff.value
+    ? [
+        { key: 'home', label: '工作台', icon: '🧭' },
+        { key: 'tasks', label: '设备', icon: '📟' },
+        { key: 'alarms', label: '告警', icon: '🔔' },
+        { key: 'profile', label: '我的', icon: '👤' }
+      ]
+    : consumerTabs
+})
+
+const pendingWorkorders = computed(() => admin.workorders.filter(w => w.status !== '已完成'))
+const staffAlarms = computed(() => admin.openAlarms.slice(0, 6))
+const offlineDevices = computed(() => admin.devices.filter(d => !d.online))
+const agriConsults = computed(() => [...admin.consults].sort((a, b) => (a.status === '待回复' ? -1 : 1) - (b.status === '待回复' ? -1 : 1)))
+const pendingConsults = computed(() => admin.consults.filter(c => c.status === '待回复'))
+const myWorkorders = computed(() => {
+  const mine = pendingWorkorders.value.filter(w => w.assignee === auth.user?.name)
+  return (mine.length ? mine : pendingWorkorders.value).slice(0, 4)
+})
+const onlineRate = computed(() => {
+  const total = admin.devices.length || 1
+  return Math.round((admin.devices.filter(d => d.online).length / total) * 100)
+})
+const greeting = computed(() => {
+  const h = new Date().getHours()
+  return h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好'
+})
+const staffActions = computed(() => {
+  if (isFarmer.value) {
+    return [
+      { icon: '🌡️', label: '环境告警', action: 'alarms' },
+      { icon: '📋', label: '农事工单', action: 'tasks' },
+      { icon: '📦', label: '订单发货', action: 'web' },
+      { icon: '🗺️', label: '地块档案', action: 'web' }
+    ]
+  }
+  if (isAgri.value) {
+    return [
+      { icon: '💬', label: '农户咨询', action: 'tasks' },
+      { icon: '🔬', label: '病虫害诊断', action: 'tasks' },
+      { icon: '📘', label: '技术方案', action: 'plans' },
+      { icon: '🧪', label: '农残报告', action: 'web' }
+    ]
+  }
+  return [
+    { icon: '🔔', label: '告警处置', action: 'alarms' },
+    { icon: '🛠️', label: '设备管理', action: 'tasks' },
+    { icon: '🧰', label: '报修工单', action: 'web' },
+    { icon: '📡', label: '采集监控', action: 'web' }
+  ]
+})
+
+function plotName(id) { return DB.plots.find(p => p.id === id)?.name || id || '—' }
+function onStaffAction(a) {
+  if (a.action === 'web') return ElMessage.info('该功能请在网页端后台操作')
+  activeTab.value = a.action
+}
+function logoutStaff() {
+  auth.logout()
+  activeTab.value = 'home'
+  ElMessage.success('已退出登录')
+}
+watch(() => auth.user?.role, () => { activeTab.value = 'home' })
+
 const cats = DB.catTree.map(c => ({ name: c.name, icon: c.icon }))
 const catFilters = computed(() => ['全部', ...DB.catTree.map(c => c.name)])
 const filteredGoods = computed(() => DB.goods.filter(g => {
@@ -339,12 +561,12 @@ function queryTrace() {
 .ah-icons .cart i { position: absolute; top: -4px; right: -6px; font-style: normal; font-size: 7px; background: #cf5d4d; color: #fff; border-radius: 6px; min-width: 11px; height: 11px; line-height: 11px; text-align: center; padding: 0 2px; }
 .app-body { flex: 1; overflow-y: auto; padding: 8px 12px 12px; scrollbar-width: none; }
 .app-body::-webkit-scrollbar { display: none; }
-.m-hero { display: flex; align-items: center; gap: 6px; background: linear-gradient(120deg, #2f5639, #4d7d51 62%, #7ba36f); border-radius: 16px; padding: 14px 13px; color: #eaf5e4; position: relative; overflow: hidden; }
+.m-hero { display: flex; align-items: center; gap: 6px; background: linear-gradient(120deg, #3d7a49, #559257 62%, #7bab74); border-radius: 16px; padding: 14px 13px; color: #edf7e8; position: relative; overflow: hidden; }
 .m-hero::after { content: ""; position: absolute; right: -24px; top: -34px; width: 96px; height: 96px; border-radius: 50%; background: rgba(255,255,255,.1); }
 .mh-copy { flex: 1; min-width: 0; position: relative; z-index: 1; }
-.mh-copy > span { font-size: 6px; letter-spacing: 1.2px; color: #b7d7a9; }
+.mh-copy > span { font-size: 6px; letter-spacing: 1.2px; color: #cfe8c7; }
 .mh-copy > b { display: block; font-size: 18px; line-height: 1.28; color: #fff; margin: 3px 0; }
-.mh-copy > small { display: block; font-size: 7.5px; color: #c3dcc0; }
+.mh-copy > small { display: block; font-size: 7.5px; color: #dcefd6; }
 .mh-copy > button { margin-top: 7px; border: none; background: #e2f1cf; color: #2c4a33; border-radius: 14px; padding: 4px 10px; font-size: 8px; font-weight: 600; cursor: pointer; }
 .mh-emoji { font-size: 58px; position: relative; z-index: 1; filter: drop-shadow(0 10px 12px rgba(0,0,0,.18)); }
 .m-trust { display: flex; justify-content: space-between; margin: 9px 0; padding: 7px 8px; background: #fff; border: 1px solid var(--line); border-radius: 9px; font-size: 7.5px; color: var(--ink-500); }
@@ -363,10 +585,10 @@ function queryTrace() {
 .mg-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 3px; }
 .mg-foot > span { font-size: 11px; font-weight: 700; color: #b5473d; }
 .mg-foot button { width: 18px; height: 18px; border-radius: 50%; border: none; background: var(--brand-600); color: #fff; font-size: 11px; line-height: 1; cursor: pointer; }
-.m-trace-card { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #20352a; color: #dcefd8; cursor: pointer; }
+.m-trace-card { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: linear-gradient(135deg, #3f7d4b, #5a9a60); color: #e2f0dc; cursor: pointer; }
 .m-trace-card > div { flex: 1; }
 .m-trace-card b { display: block; font-size: 9.5px; color: #eef8e9; }
-.m-trace-card span { font-size: 7.5px; color: #96b49b; }
+.m-trace-card span { font-size: 7.5px; color: #cfe3c8; }
 .mtc-qr { font-size: 26px; color: #b8d8b2; }
 .m-search { display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 7px 11px; font-size: 11px; }
 .m-search input { flex: 1; border: none; outline: none; background: transparent; font-size: 9.5px; color: var(--ink-700); }
@@ -408,11 +630,11 @@ function queryTrace() {
 .mtr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand-500); margin-top: 3px; flex: 0 0 7px; }
 .mtr-step b { display: block; font-size: 8.5px; }
 .mtr-step p { font-size: 7.5px; color: var(--ink-400); line-height: 1.45; }
-.m-profile-head { display: flex; align-items: center; gap: 9px; padding: 12px; border-radius: 14px; background: linear-gradient(120deg, #2f5639, #4d7d51 70%); color: #eaf5e4; }
+.m-profile-head { display: flex; align-items: center; gap: 9px; padding: 12px; border-radius: 14px; background: linear-gradient(120deg, #3d7a49, #559257 70%); color: #edf7e8; }
 .mp-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28); display: grid; place-items: center; font-size: 16px; flex: 0 0 40px; }
 .m-profile-head > div:nth-child(2) { flex: 1; min-width: 0; }
 .m-profile-head b { display: block; font-size: 11px; color: #fff; }
-.m-profile-head span { font-size: 7.5px; color: #bdd6bd; }
+.m-profile-head span { font-size: 7.5px; color: #dcefd6; }
 .m-profile-head button { border: 1px solid rgba(255,255,255,.3); background: transparent; color: #eaf5e4; border-radius: 11px; padding: 3px 8px; font-size: 7.5px; cursor: pointer; }
 .m-profile-stats { display: flex; justify-content: space-around; margin: 9px 0; padding: 9px 0; background: #fff; border: 1px solid var(--line); border-radius: 11px; }
 .m-profile-stats div { text-align: center; }
@@ -432,6 +654,27 @@ function queryTrace() {
 .app-tabbar small { font-size: 7px; }
 .app-tabbar button.on { color: var(--brand-600); }
 .phone-shadow { position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); width: 260px; height: 36px; border-radius: 50%; background: rgba(30, 60, 40, .14); filter: blur(14px); z-index: 1; }
+.m-work-hero { background: linear-gradient(120deg, #3d7a49, #559257 62%, #7bab74); border-radius: 14px; padding: 13px; color: #edf7e8; }
+.m-work-hero > span { font-size: 7px; letter-spacing: 1px; color: #cfe8c7; }
+.m-work-hero > b { display: block; margin: 4px 0 2px; font-size: 14px; color: #fff; }
+.m-work-hero > small { font-size: 8px; color: #dcefd6; }
+.m-work-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+.m-work-stats > div { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px 4px; text-align: center; }
+.m-work-stats b { display: block; font-size: 14px; color: var(--brand-700); }
+.m-work-stats span { font-size: 7.5px; color: var(--ink-400); }
+.m-work-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 11px; }
+.m-work-actions button { display: flex; flex-direction: column; align-items: center; gap: 3px; border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 8px 2px; cursor: pointer; }
+.m-work-actions span { font-size: 16px; }
+.m-work-actions b { font-size: 7.5px; font-weight: 500; color: var(--ink-600); white-space: nowrap; }
+.m-work-list { display: flex; flex-direction: column; gap: 6px; }
+.m-work-item { display: flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px 9px; }
+.mwi-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand-500); flex: 0 0 7px; }
+.mwi-dot.off { background: #d05c4c; }
+.m-work-item > div { flex: 1; min-width: 0; }
+.m-work-item b { display: block; font-size: 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-work-item small { display: block; font-size: 7.5px; color: var(--ink-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-work-item em { font-style: normal; font-size: 8px; color: var(--brand-600); }
+.m-work-item em.off { color: #c4553f; }
 .m-sub-head { display: flex; align-items: center; gap: 6px; padding: 2px 2px 8px; }
 .m-sub-head button { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 13px; line-height: 1; color: var(--ink-500); }
 .m-sub-head b { font-size: 12px; }

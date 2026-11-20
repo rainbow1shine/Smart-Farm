@@ -479,19 +479,19 @@ function contact() { ElMessage.info('客服热线：400-880-2026（演示环境�
 
 <style scoped>
 .profile-page { max-width: 1180px; margin: 0 auto; padding: 24px 24px 16px; }
-.profile-hero { position: relative; display: flex; align-items: center; gap: 20px; padding: 26px 30px; border-radius: 20px; background: linear-gradient(120deg, #2e5137, #47754c 58%, #6f9869); color: #eaf3e6; overflow: hidden; }
+.profile-hero { position: relative; display: flex; align-items: center; gap: 20px; padding: 26px 30px; border-radius: 20px; background: linear-gradient(120deg, #3d7a49, #559257 58%, #7bab74); color: #edf7e8; overflow: hidden; }
 .profile-hero::before { content: ""; position: absolute; right: -60px; top: -90px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.14), transparent 68%); }
 .profile-hero::after { content: "🌾"; position: absolute; right: 32%; bottom: -26px; font-size: 96px; opacity: .09; }
 .ph-avatar { width: 76px; height: 76px; border-radius: 50%; background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.3); display: grid; place-items: center; font-size: 30px; flex: 0 0 76px; position: relative; z-index: 1; }
 .ph-main { flex: 1; min-width: 0; position: relative; z-index: 1; }
 .ph-role { font-size: 9.5px; letter-spacing: 1.5px; color: #c9e2b8; background: rgba(255,255,255,.12); border-radius: 20px; padding: 2px 9px; }
 .ph-main h1 { font-size: 25px; color: #fff; margin: 5px 0 2px; }
-.ph-main > p { font-size: 11.5px; color: #bdd6bd; }
+.ph-main > p { font-size: 11.5px; color: #e2f0db; }
 .ph-chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-.ph-chips span { font-size: 9.5px; color: #cfe3c9; border: 1px solid rgba(255,255,255,.16); border-radius: 20px; padding: 2px 9px; }
+.ph-chips span { font-size: 9.5px; color: #e6f3df; border: 1px solid rgba(255,255,255,.28); border-radius: 20px; padding: 2px 9px; }
 .ph-stats { display: flex; gap: 30px; position: relative; z-index: 1; }
 .ph-stats b { display: block; font-size: 23px; color: #fff; line-height: 1.2; }
-.ph-stats span { font-size: 9.5px; color: #a9c9b6; }
+.ph-stats span { font-size: 9.5px; color: #d6eacd; }
 .profile-grid { display: grid; grid-template-columns: 214px 1fr; gap: 16px; margin-top: 16px; align-items: start; }
 .profile-nav { padding: 10px; position: sticky; top: 88px; }
 .profile-nav > button { display: flex; align-items: center; gap: 9px; width: 100%; border: none; background: transparent; border-radius: 9px; padding: 10px 11px; font-size: 12.5px; color: var(--ink-500); cursor: pointer; text-align: left; transition: all .15s; }
