@@ -9,10 +9,11 @@ export const ROLE_META = {
 export const DEMO_ACCOUNTS = [
   { role: 'admin', account: 'admin', password: 'admin123', label: '管理员（龙）', desc: '用户 / 角色 / 监管 / 档案' },
   { role: 'admin', account: 'twt', password: '123', label: '管理员（谭）', desc: '数据监管 / 商城运营' },
-  { role: 'ops', account: 'ops01', password: 'ops123', label: '运维', desc: '设备 / 采集 / 告警 / 备份' },
-  { role: 'farmer', account: 'farmer01', password: 'farmer123', label: '农户', desc: '监测 / 控制 / 工单 / 商城' },
-  { role: 'agri', account: 'agri01', password: 'agri123', label: '农艺', desc: '诊断 / 方案 / 质量评估' },
-  { role: 'consumer', account: '18700002233', password: '8888', label: '消费者', desc: '商城 / 溯源 / 订单' }
+  { role: 'ops', account: 'ops01', password: 'ops123', label: '运维（王）', desc: '设备 / 采集 / 告警 / 备份' },
+  { role: 'farmer', account: 'farmer01', password: 'farmer123', label: '农户（吴）', desc: '监测 / 控制 / 工单 / 商城' },
+  { role: 'agri', account: 'agri01', password: 'agri123', label: '农艺（张）', desc: '诊断 / 方案 / 质量评估' },
+  { role: 'consumer', account: '18700002234', password: '8888', label: '消费者（朱）', desc: '商城 / 溯源 / 订单' },
+  { role: 'consumer', account: '18700002233', password: '8888', label: '消费者（王双红）', desc: '商城 / 售后 / 评价' }
 ]
 
 export const MENUS = {

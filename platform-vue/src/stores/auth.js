@@ -9,7 +9,7 @@ function localUser(account) {
   if (!preset) return null
   const meta = ROLE_META[preset.role]
   const names = { admin: '龙管理', ops: '王运维', farmer: '吴农户', agri: '张农艺', consumer: '朱消费' }
-  const accountNames = { twt: '谭管理' }
+  const accountNames = { twt: '谭管理', '18700002233': '王双红' }
   return {
     id: 'L-' + preset.role,
     account: preset.account,

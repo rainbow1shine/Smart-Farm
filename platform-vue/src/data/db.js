@@ -292,7 +292,7 @@ const DB = {
     { id: 'U002', account: 'ops01', name: '王运维', gender: '女', phone: '13800002222', park: '永川智慧农业示范园', role: '运维', status: '启用', last: '2026-11-09 08:05' },
     { id: 'U003', account: 'farmer01', name: '吴农户', gender: '女', phone: '13800003333', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 07:10' },
     { id: 'U004', account: 'agri01', name: '张农艺', gender: '女', phone: '13800006666', park: '全园区', role: '农艺技术人员', status: '启用', last: '2026-11-09 09:00' },
-    { id: 'U005', account: 'user001', name: '朱消费', gender: '女', phone: '13866626621', park: '—', role: '消费者', status: '启用', last: '2026-11-09 09:02' },
+    { id: 'U005', account: 'user001', name: '朱消费', gender: '女', phone: '18700002234', park: '—', role: '消费者', status: '启用', last: '2026-11-09 09:02' },
     { id: 'U006', account: 'twt', name: '谭管理', gender: '女', phone: '13212518067', park: '平台中心', role: '管理员', status: '启用', last: '2026-10-22 20:30' },
   ],
 
@@ -420,7 +420,7 @@ DB.afterSales = [
 ];
 
 DB.consumers = [
-  { id: 'CU-001', name: '王消费', phone: '187****2233', level: '青梅会员', orders: 3, spend: 221.6, status: '正常', reg: '2026-08-12', warn: 0 },
+  { id: 'CU-001', name: '王双红', phone: '187****2233', level: '青梅会员', orders: 3, spend: 221.6, status: '正常', reg: '2026-08-12', warn: 0 },
   { id: 'CU-002', name: '谭消费', phone: '138****6621', level: '新芽会员', orders: 1, spend: 25.6, status: '正常', reg: '2026-10-03', warn: 0 },
   { id: 'CU-003', name: '吴消费', phone: '135****8890', level: '新芽会员', orders: 1, spend: 28.8, status: '已警告', reg: '2026-09-18', warn: 1 }
 ];
