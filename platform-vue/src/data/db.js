@@ -288,15 +288,12 @@ const DB = {
 
   /* 用户 */
   users: [
-    { id: 'U001', account: 'admin', name: '张', gender: '男', phone: '13800001111', park: '平台中心', role: '管理员', status: '启用', last: '2026-11-09 08:30' },
-    { id: 'U002', account: 'ops01', name: '谭', gender: '男', phone: '13800002222', park: '永川智慧农业示范园', role: '运维', status: '启用', last: '2026-11-09 08:05' },
-    { id: 'U003', account: 'farmer01', name: '龙', gender: '男', phone: '13800003333', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 07:10' },
-    { id: 'U004', account: 'farmer02', name: '王', gender: '女', phone: '13800004444', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 08:12' },
-    { id: 'U005', account: 'farmer03', name: '张', gender: '男', phone: '13800005555', park: '璧山蔬菜保供基地', role: '农户', status: '启用', last: '2026-11-08 17:40' },
-    { id: 'U006', account: 'agri01', name: '朱', gender: '女', phone: '13800006666', park: '全园区', role: '农艺技术人员', status: '启用', last: '2026-11-09 09:00' },
-    { id: 'U007', account: 'agri02', name: '王', gender: '男', phone: '13800007777', park: '南川大观生态农业园', role: '农艺技术人员', status: '启用', last: '2026-11-09 08:48' },
-    { id: 'U008', account: 'user001', name: '谭女士', gender: '女', phone: '13866626621', park: '—', role: '消费者', status: '启用', last: '2026-11-09 09:02' },
-    { id: 'U009', account: 'user002', name: '吴先生', gender: '男', phone: '13566668890', park: '—', role: '消费者', status: '停用', last: '2026-10-22 20:30' },
+    { id: 'U001', account: 'admin', name: '龙管理', gender: '女', phone: '13800001111', park: '平台中心', role: '管理员', status: '启用', last: '2026-11-09 08:30' },
+    { id: 'U002', account: 'ops01', name: '王运维', gender: '女', phone: '13800002222', park: '永川智慧农业示范园', role: '运维', status: '启用', last: '2026-11-09 08:05' },
+    { id: 'U003', account: 'farmer01', name: '吴农户', gender: '女', phone: '13800003333', park: '永川智慧农业示范园', role: '农户', status: '启用', last: '2026-11-09 07:10' },
+    { id: 'U004', account: 'agri01', name: '张农艺', gender: '女', phone: '13800006666', park: '全园区', role: '农艺技术人员', status: '启用', last: '2026-11-09 09:00' },
+    { id: 'U005', account: 'user001', name: '朱消费', gender: '女', phone: '13866626621', park: '—', role: '消费者', status: '启用', last: '2026-11-09 09:02' },
+    { id: 'U006', account: 'admin', name: '谭管理', gender: '女', phone: '13212518067', park: '平台中心', role: '管理员', status: '启用', last: '2026-10-22 20:30' },
   ],
 
   /* 角色 */
@@ -320,10 +317,10 @@ const DB = {
 
   /* 日志 */
   logs: [
-    { time: '2026-11-09 09:02', user: '谭女士', role: '消费者', ip: '117.139.21.9', action: '提交订单 DD-20261109-001', type: '操作日志', result: '成功' },
-    { time: '2026-11-09 08:30', user: '张', role: '管理员', ip: '10.20.0.9', action: '登录平台', type: '登录日志', result: '成功' },
-    { time: '2026-11-09 08:20', user: '龙', role: '农户', ip: '10.20.3.41', action: '开启 A01 环流风机1号', type: '操作日志', result: '成功' },
-    { time: '2026-11-09 08:05', user: '谭', role: '运维', ip: '10.20.0.21', action: '登录平台', type: '登录日志', result: '成功' },
+    { time: '2026-11-09 09:02', user: '朱消费', role: '消费者', ip: '117.139.21.9', action: '提交订单 DD-20261109-001', type: '操作日志', result: '成功' },
+    { time: '2026-11-09 08:30', user: '龙管理', role: '管理员', ip: '10.20.0.9', action: '登录平台', type: '登录日志', result: '成功' },
+    { time: '2026-11-09 08:20', user: '吴农户', role: '农户', ip: '10.20.3.41', action: '开启 A01 环流风机1号', type: '操作日志', result: '成功' },
+    { time: '2026-11-09 08:05', user: '王运维', role: '运维', ip: '10.20.0.21', action: '登录平台', type: '登录日志', result: '成功' },
     { time: '2026-11-09 07:40', user: '未知账号', role: '—', ip: '45.132.8.66', action: '尝试登录失败（密码错误）', type: '登录日志', result: '失败' },
     { time: '2026-11-08 22:15', user: '系统', role: '—', ip: '—', action: '生成告警 AL-0912', type: '系统日志', result: '成功' },
   ],
@@ -393,15 +390,15 @@ DB.messages = [
 
 DB.consults = [
   {
-    id: 'CS-001', from: '龙', role: '农户', plot: 'A区1号连栋大棚', title: '番茄下部叶片发黄',
+    id: 'CS-001', from: '吴农户', role: '农户', plot: 'A区1号连栋大棚', title: '番茄下部叶片发黄',
     content: '最近三天番茄下部老叶发黄，叶脉还是绿的，棚内湿度 75% 左右，请问是缺镁还是病害？',
     time: '2026-11-09 08:40', status: '待回复', reply: '',
     messages: [
-      { from: 'farmer', text: '龙老师，最近三天番茄下部老叶发黄，叶脉还是绿的，棚内湿度 75% 左右，是缺镁还是病害？', time: '2026-11-09 08:40' }
+      { from: 'farmer', text: '吴老师，最近三天番茄下部老叶发黄，叶脉还是绿的，棚内湿度 75% 左右，是缺镁还是病害？', time: '2026-11-09 08:40' }
     ]
   },
   {
-    id: 'CS-002', from: '张', role: '农户', plot: 'C区草莓园', title: '草莓白粉病用药建议',
+    id: 'CS-002', from: '吴', role: '农户', plot: 'C区草莓园', title: '草莓白粉病用药建议',
     content: '草莓叶片背面有白色粉状物，已经用了一次醚菌酯，还需要补喷吗？',
     time: '2026-11-08 17:10', status: '已回复',
     reply: '间隔 7 天后再补喷一次，重点喷叶背，注意采收安全间隔期。',
@@ -423,9 +420,9 @@ DB.afterSales = [
 ];
 
 DB.consumers = [
-  { id: 'CU-001', name: '王双红', phone: '187****2233', level: '青梅会员', orders: 3, spend: 221.6, status: '正常', reg: '2026-08-12', warn: 0 },
-  { id: 'CU-002', name: '谭女士', phone: '138****6621', level: '新芽会员', orders: 1, spend: 25.6, status: '正常', reg: '2026-10-03', warn: 0 },
-  { id: 'CU-003', name: '吴先生', phone: '135****8890', level: '新芽会员', orders: 1, spend: 28.8, status: '已警告', reg: '2026-09-18', warn: 1 }
+  { id: 'CU-001', name: '王消费', phone: '187****2233', level: '青梅会员', orders: 3, spend: 221.6, status: '正常', reg: '2026-08-12', warn: 0 },
+  { id: 'CU-002', name: '谭管理', phone: '138****6621', level: '新芽会员', orders: 1, spend: 25.6, status: '正常', reg: '2026-10-03', warn: 0 },
+  { id: 'CU-003', name: '吴农户', phone: '135****8890', level: '新芽会员', orders: 1, spend: 28.8, status: '已警告', reg: '2026-09-18', warn: 1 }
 ];
 
 DB.repairs = [
