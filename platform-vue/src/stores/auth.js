@@ -8,11 +8,12 @@ function localUser(account) {
   const preset = DEMO_ACCOUNTS.find(a => a.account.toLowerCase() === String(account).toLowerCase())
   if (!preset) return null
   const meta = ROLE_META[preset.role]
-  const names = { admin: '张', ops: '谭', farmer: '龙', agri: '朱', consumer: '王双红' }
+  const names = { admin: '龙管理', ops: '王运维', farmer: '吴农户', agri: '张农艺', consumer: '朱消费' }
+  const accountNames = { twt: '谭管理' }
   return {
     id: 'L-' + preset.role,
     account: preset.account,
-    name: names[preset.role],
+    name: accountNames[preset.account] || names[preset.role],
     role: preset.role,
     phone: preset.role === 'consumer' ? '18700002233' : '138****' + (1000 + preset.role.length),
     park: preset.role === 'consumer' ? '—' : '永川智慧农业示范园',
@@ -63,12 +64,12 @@ export const useAuthStore = defineStore('auth', {
             return this.user
           } catch (err) {
             const fallback = localUser(account)
-            if (!fallback || password !== DEMO_ACCOUNTS.find(a => a.role === fallback.role)?.password) throw err
+            if (!fallback || password !== DEMO_ACCOUNTS.find(a => a.account.toLowerCase() === String(account).toLowerCase())?.password) throw err
           }
         }
         const fallback = localUser(account)
         if (!fallback) throw new Error('账号或密码不正确')
-        const preset = DEMO_ACCOUNTS.find(a => a.role === fallback.role)
+        const preset = DEMO_ACCOUNTS.find(a => a.account.toLowerCase() === String(account).toLowerCase())
         if (password !== preset.password) throw new Error('账号或密码不正确')
         this.user = fallback
         this.token = ''
@@ -128,8 +129,9 @@ export const useAuthStore = defineStore('auth', {
       }
       saveUser(this.user)
     },
-    quick(role) {
-      const p = DEMO_ACCOUNTS.find(a => a.role === role)
+    quick(account) {
+      const key = String(account || '').toLowerCase()
+      const p = DEMO_ACCOUNTS.find(a => a.account.toLowerCase() === key) || DEMO_ACCOUNTS.find(a => a.role === account)
       if (!p) return null
       this.user = localUser(p.account)
       this.token = ''

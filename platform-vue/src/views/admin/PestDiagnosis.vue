@@ -121,7 +121,7 @@ const detailOpen = ref(false)
 const addOpen = ref(false)
 const current = ref(null)
 const advice = ref('')
-const form = reactive({ plot: DB.plots[0].name, crop: '草莓', reporter: '龙', question: '' })
+const form = reactive({ plot: DB.plots[0].name, crop: '草莓', reporter: '吴农户', question: '' })
 
 const cropIcon = (c) => ({ 草莓: '🍓', 番茄: '🍅', 黄瓜: '🥒', 玉米: '🌽', 水稻: '🌾', 小白菜: '🥬' }[c] || '🌱')
 
@@ -138,7 +138,7 @@ function confirmDiagnosis() {
 }
 function sendPlan() {
   if (!advice.value.trim()) return ElMessage.warning('请先填写防治建议')
-  admin.addTechPlan({ plot: current.value.plot, crop: current.value.crop, stage: '生长期', type: '病虫害防治', content: advice.value.trim(), author: '朱' })
+  admin.addTechPlan({ plot: current.value.plot, crop: current.value.crop, stage: '生长期', type: '病虫害防治', content: advice.value.trim(), author: '张农艺' })
   admin.update('pestCases', current.value.id, { status: '已诊断', advice: advice.value.trim() })
   detailOpen.value = false
   ElMessage.success('防治方案已下发至农户')
