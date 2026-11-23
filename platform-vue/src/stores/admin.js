@@ -1,3 +1,19 @@
+/**
+ * ============================================================
+ * 管理员数据 Store —— 全平台业务数据的「单一数据源」
+ * ------------------------------------------------------------
+ * 讲解重点：
+ *   1. LocalStorage 持久化（read/save 双函数），刷新不丢数据
+ *   2. pick() —— 从 db.js 深拷贝所有演示数据做初始化
+ *   3. clone() —— JSON 深拷贝，避免引用类型互相污染
+ *   4. ⭐ 通用 CRUD 三方法 add/update/remove —— 任意集合通用
+ *   5. 业务专用方法封装（shipOrder/handleAlarm/controlDevice 等）
+ *
+ * 真实后端接入：
+ *   只需把这些方法内部改成调用 api.xxx()，组件层完全不用改！
+ *   比如 addUser 改成: const user = await api.createUser(payload)
+ * ============================================================
+ */
 import { defineStore } from 'pinia'
 import DB from '@/data/db'
 import { dateTime, orderNo } from '@/utils/format'
@@ -36,7 +52,7 @@ const pick = () => ({
   techPlans: clone(DB.techPlans),
   supervise: clone(DB.supervise),
   threshold: { temp: 30, humidity: 35, oxygen: 4.5, repeat: 3, sms: true },
-  permissions: clone(DB.perms)
+  permissions: clone(DB.perms)    // 注意：perms 和 permissions 指向同一份数据，兼容不同代码风格
 })
 
 // read() —— 启动时读 localStorage 缓存，pick() 兜底保证字段完整
@@ -77,6 +93,8 @@ export const useAdminStore = defineStore('admin', {
       this[collection].unshift(item)   // 头部插入，最新排最上
       this.save()
     },
+
+    // 修改 → 兼容 id/no/code 三种主键名（不同业务实体主键不一样）
     update(collection, id, patch) {
       const arr = this[collection]
       // 兼容三种主键名 id/no/code（不同业务实体主键不一样）
@@ -85,6 +103,8 @@ export const useAdminStore = defineStore('admin', {
       this.save()
       return item
     },
+
+    // 删除 → 同样兼容三种主键
     remove(collection, id) {
       this[collection] = this[collection].filter(x => x.id !== id && x.no !== id && x.code !== id)
       this.save()

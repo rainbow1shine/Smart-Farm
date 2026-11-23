@@ -1,9 +1,21 @@
+/**
+ * ============================================================
+ * 路由配置 —— 管理员模块的「权限大门」
+ * ------------------------------------------------------------
+ * 讲解重点：
+ *   1. meta 元信息控制权限（auth / admin）
+ *   2. beforeEach 全局守卫拦截未登录/越权访问
+ *   3. redirect 参数实现「登录后自动回到原页面」
+ *   4. :page 动态参数 + AdminPage 通用容器 → 配置驱动
+ *   5. Hash 模式适配 GitHub Pages 子路径部署
+ * ============================================================
+ */
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 // 路由表：5 大模块（登录 / 商城 / 管理后台 / 大屏 / 移动端）
 const routes = [
-  { path: '/', redirect: '/mall' },
+  { path: '/', redirect: '/mall' },                // 默认进商城
   { path: '/login', name: 'login', component: () => import('@/views/Login.vue'), meta: { title: '登录' } },
   {
     path: '/mall',

@@ -65,9 +65,39 @@ export function getPageMeta(id) {
   return META[id] || { title: '页面', sub: '智慧农业综合管理平台' }
 }
 
+/**
+ * tag / moneyCol —— columns 的列配置快捷工厂
+ * type: 'tag'   → DataTable 自动用 el-tag 渲染（适合状态、类型等字段）
+ * type: 'money' → DataTable 自动加 ¥ 前缀 + 千分位格式化（适合金额字段）
+ */
 const tag = (prop, label, width) => ({ prop, label, type: 'tag', width })
 const moneyCol = (prop, label, width) => ({ prop, label, type: 'money', width })
 
+/**
+ * CONFIG —— collection 页面的详细配置表
+ *
+ * 每个 pageId 对应一份配置对象，AdminPage.vue 消费这些配置自动渲染：
+ *
+ * stats:    顶部 StatCard 统计卡片数组，每个元素用 S() 工厂生成
+ *           value 可以是静态值或函数 (store) => 动态计算
+ *
+ * columns:  DataTable 列定义
+ *   - prop: 对应数据对象的字段名
+ *   - label: 表头显示名
+ *   - type: 'tag'（自动渲染标签）| 'money'（自动格式化金额）
+ *   - width / minWidth: 列宽
+ *
+ * filters:  筛选下拉框配置
+ *   - key: 对应字段名
+ *   - options: [{ label, value }] 选项数组
+ *
+ * rowActions: 每行右侧的操作按钮
+ *   - key: 操作类型（delete / toggle / edit / ship / reply 等）
+ *          AdminPage.vue 的 onRowAction 里统一分发处理
+ *
+ * charts:   图表配置（用 ECharts，AdminPage 里 ChartBox 组件渲染）
+ * notices:  顶部提示通知横幅
+ */
 const CONFIG = {
   log: {
     stats: [

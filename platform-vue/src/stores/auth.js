@@ -1,3 +1,14 @@
+/**
+ * ============================================================
+ * 登录认证 Store —— 管理当前用户登录态
+ * ------------------------------------------------------------
+ * 讲解重点：
+ *   1. 双模式自动切换（后端在线 → 调 API / 离线 → 演示账号）
+ *   2. localStorage 持久化登录态（刷新不丢）
+ *   3. JWT Token 存储（演示环境为空）
+ *   4. init() 启动时自动恢复登录态 + 校验 Token 有效性
+ * ============================================================
+ */
 import { defineStore } from 'pinia'
 import { api, checkHealth, getToken, setToken, getSavedUser, saveUser, isOnline } from '@/api/client'
 import { DEMO_ACCOUNTS, ROLE_META } from '@/data/menus'
@@ -25,6 +36,14 @@ function localUser(account) {
 
 // ⭐ Pinia Store —— 登录认证中心（Vue 3 官方推荐，比 Vuex 更简洁）
 export const useAuthStore = defineStore('auth', {
+  /**
+   * state —— 核心状态
+   *   user    当前登录用户对象（从 localStorage 恢复）
+   *   token   JWT Token（演示环境为空字符串）
+   *   online  后端是否在线（影响登录模式选择）
+   *   ready   是否初始化完成（路由守卫会等它）
+   *   loading 登录按钮 loading 状态
+   */
   state: () => ({
     user: getSavedUser(),    // 启动时从 localStorage 自动恢复
     token: getToken(),       // JWT Token（演示环境为空）
@@ -32,12 +51,17 @@ export const useAuthStore = defineStore('auth', {
     ready: false,            // 是否初始化完成（路由守卫会等它）
     loading: false           // 登录按钮 loading
   }),
+
+  /**
+   * getters —— 便捷计算属性，避免组件里反复写 user?.role
+   */
   getters: {
     role: (s) => s.user?.role || '',
     roleMeta: (s) => ROLE_META[s.user?.role] || ROLE_META.consumer,
     isLogged: (s) => !!s.user,          // 布尔值，方便模板里 v-if
     isConsumer: (s) => s.user?.role === 'consumer'
   },
+
   actions: {
     // 启动时调用：检测后端 + 恢复登录态 + 校验 Token
     async init() {
@@ -51,6 +75,7 @@ export const useAuthStore = defineStore('auth', {
           this.user = { ...this.user, ...me, role: me.role || this.user.role, avatar: ROLE_META[me.role]?.short || '农' }
           saveUser(this.user)
         } catch {
+          // Token 无效 → 清除，下次登录
           this.token = ''
           setToken('')
         }
@@ -96,6 +121,7 @@ export const useAuthStore = defineStore('auth', {
     async loginCode(phone, code) {
       this.loading = true
       try {
+        // 手机号正则：1开头 + 3-9第二位 + 9位数字
         if (!/^1[3-9]\d{9}$/.test(phone)) throw new Error('请输入正确的 11 位手机号')
         if (!/^\d{4,6}$/.test(code)) throw new Error('请输入正确的验证码')
         if (this.online) {
