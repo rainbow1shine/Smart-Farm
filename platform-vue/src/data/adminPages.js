@@ -1,7 +1,63 @@
+/**
+ * ============================================================
+ * ⭐⭐⭐ 配置驱动页面引擎 —— AdminPage 的「大脑」
+ * ------------------------------------------------------------
+ * 讲解重点（核心亮点！一定要重点讲！）：
+ *
+ * 设计思路：
+ *   不想为 40+ 个管理页面各写一个 Vue 组件 → 用一份配置表搞定大部分
+ *   AdminPage.vue 是通用容器，根据配置自动渲染：StatCard + DataTable + 操作弹窗
+ *
+ * 两个核心映射表：
+ *   META  —— pageId → { title, sub, custom?, collection? }
+ *            custom: 需要独立组件的页面（Dashboard、UserManage 等）
+ *            collection: 指向 admin store 里的数组名（logs、devices 等）
+ *
+ *   CONFIG —— pageId → { stats, columns, filters, rowActions, charts, notices }
+ *            stats:    顶部统计卡片配置
+ *            columns:  DataTable 列配置（支持 type:'tag'/'money' 自动渲染）
+ *            filters:  筛选下拉框
+ *            rowActions: 行操作按钮（delete/toggle/edit/ship/reply 等）
+ *
+ * 页面类型分两种：
+ *   ① custom 页面 —— 有 custom 字段 → AdminPage 用动态组件 :is 渲染独立 Vue 文件
+ *   ② collection 页面 —— 只有 collection 字段 → 完全用 CONFIG 配置自动生成，不用写组件！
+ *
+ * 新增一个页面只需 2 步：
+ *   1. META 加一行：'my-page': { title: '我的页面', collection: 'mydata' }
+ *   2. CONFIG 加一段：my-page: { stats: [...], columns: [...], rowActions: [...] }
+ *   完事！不用写任何 Vue 组件！✨
+ * ============================================================
+ */
 import DB from '@/data/db'
 
+/**
+ * S —— StatCard 快捷工厂
+ * label: 统计卡标题
+ * value: 可以是数字/字符串，也可以是函数 (store) => 动态值
+ * unit:  单位（个/条/亩...）
+ * foot:  底部小字说明
+ * icon:  Element Plus 图标名（字符串，AdminPage 里会动态注册）
+ * tone:  色调整体：info/warn/danger
+ */
 const S = (label, value, unit, foot, icon, tone) => ({ label, value, unit, foot, icon, tone })
 
+/**
+ * META —— 页面元信息映射表（讲解重点！）
+ *
+ * 两种页面：
+ *   ✅ custom 页面：有 custom 字段 → AdminPage 渲染独立 Vue 组件
+ *      比如：dashboard、user、role、perm、device、order 等
+ *
+ *   ✅ collection 页面：有 collection 字段 → 完全配置驱动，不用写组件
+ *      比如：log、api、basic-plot、basic-input、farm-harvest 等
+ *
+ * custom 值对应 AdminPage.vue 里 customMap 的 key
+ * collection 值对应 admin store 里 state 的属性名
+ *
+ * 注意：有些页面同时需要 collection（数据来源）和 custom（特殊渲染），
+ *       此时 custom 优先，collection 只作为数据参考
+ */
 const META = {
   dashboard: { title: '工作台', sub: '园区生产运行总览', custom: 'Dashboard' },
   user: { title: '用户管理', sub: '平台账号新增、修改、启停与查询', custom: 'UserManage' },
@@ -58,9 +114,39 @@ export function getPageMeta(id) {
   return META[id] || { title: '页面', sub: '智慧农业综合管理平台' }
 }
 
+/**
+ * tag / moneyCol —— columns 的列配置快捷工厂
+ * type: 'tag'   → DataTable 自动用 el-tag 渲染（适合状态、类型等字段）
+ * type: 'money' → DataTable 自动加 ¥ 前缀 + 千分位格式化（适合金额字段）
+ */
 const tag = (prop, label, width) => ({ prop, label, type: 'tag', width })
 const moneyCol = (prop, label, width) => ({ prop, label, type: 'money', width })
 
+/**
+ * CONFIG —— collection 页面的详细配置表
+ *
+ * 每个 pageId 对应一份配置对象，AdminPage.vue 消费这些配置自动渲染：
+ *
+ * stats:    顶部 StatCard 统计卡片数组，每个元素用 S() 工厂生成
+ *           value 可以是静态值或函数 (store) => 动态计算
+ *
+ * columns:  DataTable 列定义
+ *   - prop: 对应数据对象的字段名
+ *   - label: 表头显示名
+ *   - type: 'tag'（自动渲染标签）| 'money'（自动格式化金额）
+ *   - width / minWidth: 列宽
+ *
+ * filters:  筛选下拉框配置
+ *   - key: 对应字段名
+ *   - options: [{ label, value }] 选项数组
+ *
+ * rowActions: 每行右侧的操作按钮
+ *   - key: 操作类型（delete / toggle / edit / ship / reply 等）
+ *          AdminPage.vue 的 onRowAction 里统一分发处理
+ *
+ * charts:   图表配置（用 ECharts，AdminPage 里 ChartBox 组件渲染）
+ * notices:  顶部提示通知横幅
+ */
 const CONFIG = {
   log: {
     stats: [
@@ -387,15 +473,39 @@ const CONFIG = {
   }
 }
 
+/**
+ * ============================================================
+ * ⭐ getPageConfig —— 工厂函数：把 META + CONFIG + store 组装成完整页面配置
+ * ------------------------------------------------------------
+ * 讲解重点！这是配置驱动的核心枢纽：
+ *
+ * 输入：id（pageId，路由里的动态参数 :page）+ store（admin store 实例）
+ * 输出：一个完整的页面配置对象，AdminPage.vue 直接消费
+ *
+ * 它做了什么？
+ *   1. 从 META 里拿到 collection（数据来源数组名）
+ *   2. 从 CONFIG 里拿到 stats/columns/filters/rowActions 等配置
+ *   3. rows() —— 动态函数，直接指向 store 里的数组（响应式）
+ *   4. stats —— 把函数型的 value 执行一遍，得到实时数字
+ *   5. columns —— 如果 CONFIG 没配，就用 store 里的数据字段自动生成兜底列
+ *
+ * 设计优点：
+ *   - CONFIG 里的 stats value 可以是函数，统计数据实时响应 store 变化
+ *   - getPageConfig 每次 AdminPage 渲染时调用，保证读到最新数据
+ *   - 新增字段自动兜底，不会因为 CONFIG 没配就缺列
+ * ============================================================
+ */
 export function getPageConfig(id, store) {
   const meta = META[id] || {}
   if (!meta.collection || !store) return null
   const base = CONFIG[id] || {}
   return {
     ...base,
-    rows: () => store[meta.collection] || [],
-    collection: meta.collection,
+    rows: () => store[meta.collection] || [],   // 💡 动态数据函数 → 响应式
+    collection: meta.collection,                 // store 里的数组名
+    // columns 兜底：CONFIG 没配就用数据字段自动生成
     columns: base.columns || Object.keys(store[meta.collection]?.[0] || {}).map(k => ({ prop: k, label: k, minWidth: 120 })),
+    // 💡 动态 stats：把函数 value 执行，得到实时数字
     stats: (base.stats || []).map(s => ({ ...s, value: typeof s.value === 'function' ? s.value(store) : s.value })),
     rowActions: base.rowActions || [{ key: 'view', label: '详情' }]
   }

@@ -1,6 +1,25 @@
+<!--
+  ============================================================
+  AdminPage.vue —— ⭐⭐⭐ 管理后台通用页面容器
+  ------------------------------------------------------------
+  讲解重点：这就是配置驱动的「渲染引擎」！
+  
+  模板里用两种模式：
+    ① <component :is="customMap[meta.custom]" /> → 复杂独立组件
+       （有 custom 字段的页面，比如 Dashboard、GIS 地图等）
+    
+    ② template v-else → 用 config 配置自动渲染
+       StatCard + ChartBox + DataTable + 详情/编辑/操作弹窗
+       （只有 collection 字段的页面，比如日志、档案、工单等）
+  
+  ============================================================
+-->
 <template>
   <div class="admin-page page-wrap">
+    <!-- ⭐ Vue 动态组件：meta.custom 存在 → 渲染对应独立组件 -->
     <component v-if="meta.custom && customMap[meta.custom]" :is="customMap[meta.custom]" />
+
+    <!-- config 配置驱动：用 adminPages.js 里的配置自动拼页面 -->
     <template v-else>
       <PageHeader :title="meta.title" :sub="meta.sub">
         <template #actions>
@@ -92,6 +111,21 @@
 </template>
 
 <script setup>
+/**
+ * AdminPage.vue —— 通用管理页容器（Vue 3 组合式 API）
+ *
+ * 核心流程：
+ *   1. route.params.page 拿到路由里的动态参数（比如 'dashboard'、'log'）
+ *   2. meta = getPageMeta(page)        → 页面元信息（title/sub/custom/collection）
+ *   3. config = getPageConfig(page, admin) → 完整页面配置（stats/columns/filters...）
+ *   4. 有 custom → 用动态组件渲染独立 Vue 文件
+ *      无 custom → 用 config 自动渲染 StatCard + DataTable
+ *
+ * 三种弹窗复用：
+ *   - el-drawer  → 详情抽屉（点击 view 操作）
+ *   - el-dialog (editOpen)   → 编辑弹窗（点击 edit 操作，字段自动生成）
+ *   - el-dialog (actionOpen) → 业务操作弹窗（发货/回复等，字段由配置指定）
+ */
 import { computed, ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -103,35 +137,8 @@ import DataTable from '@/components/DataTable.vue'
 import { useAdminStore } from '@/stores/admin'
 import { getPageConfig, getPageMeta } from '@/data/adminPages'
 
-import Dashboard from './Dashboard.vue'
-import UserManage from './UserManage.vue'
-import RoleManage from './RoleManage.vue'
-import PermManage from './PermManage.vue'
-import ParamManage from './ParamManage.vue'
-import DeviceManage from './DeviceManage.vue'
-import CollectManage from './CollectManage.vue'
-import BackupManage from './BackupManage.vue'
-import RepairManage from './RepairManage.vue'
-import ReviewManage from './ReviewManage.vue'
-import GoodsManage from './GoodsManage.vue'
-import ConsumerManage from './ConsumerManage.vue'
-import ExpertEnv from './ExpertEnv.vue'
-import PestDiagnosis from './PestDiagnosis.vue'
-import OrderManage from './OrderManage.vue'
-import SalesReport from './SalesReport.vue'
-import WorkOrders from './WorkOrders.vue'
-import InputManage from './InputManage.vue'
-import TraceEntry from './TraceEntry.vue'
-import EnvMonitor from './EnvMonitor.vue'
-import VideoMonitor from './VideoMonitor.vue'
-import Control from './Control.vue'
-import AlarmCenter from './AlarmCenter.vue'
-import GisMap from './GisMap.vue'
-import AiAnalysis from './AiAnalysis.vue'
-import DataReport from './DataReport.vue'
-import Consult from './Consult.vue'
-import MallEntry from './MallEntry.vue'
-
+// customMap —— 所有需要独立 Vue 文件的复杂页面
+// key 对应 adminPages.js 里 META.custom 字段值
 const route = useRoute()
 const admin = useAdminStore()
 const customMap = {
@@ -141,14 +148,16 @@ const customMap = {
   GisMap, AiAnalysis, DataReport, Consult, MallEntry
 }
 
+// computed —— 从 adminPages.js 工厂函数拿配置，响应式绑定
 const meta = computed(() => getPageMeta(route.params.page))
 const config = computed(() => getPageConfig(route.params.page, admin))
-const rows = computed(() => config.value?.rows?.() || [])
+const rows = computed(() => config.value?.rows?.() || [])   // 调用 getPageConfig 里的 rows() 函数
 const actionWidth = computed(() => {
   const n = config.value?.rowActions?.length || 0
   return Math.max(100, n * 58 + 20)
 })
 
+// 三种弹窗的状态变量（复用同一个模板，动态改变量）
 const detailOpen = ref(false)
 const detailRow = ref(null)
 const detailTitle = ref('详情')
@@ -160,9 +169,25 @@ const actionOpen = ref(false)
 const actionTitle = ref('操作')
 const actionForm = reactive({})
 const actionFields = ref([])
-let pendingAction = null
+let pendingAction = null   // 暂存当前操作上下文（用于 submitAction）
 
 function refresh() { ElMessage.success('数据已刷新') }
+
+/**
+ * ⭐⭐⭐ onRowAction —— 通用操作分发器（讲解重点！）
+ *
+ * 所有配置驱动页面的行操作都走这里，action 是 rowActions 里配的 key
+ * 一种 key → 一种处理逻辑，switch-case 分发到不同行为：
+ *
+ * view/detail → 弹详情抽屉
+ * edit/audit  → 弹编辑弹窗
+ * delete      → 确认框 + admin.remove()
+ * toggle      → 状态翻转（启用↔停用 / 已授权↔待配置）
+ * reply       → 弹回复框 + admin.replyReview()
+ * ship        → 弹发货框 + admin.shipOrder()
+ * assign      → admin.assignRepair()
+ * warn/ban    → admin.warnConsumer() / banConsumer()
+ */
 function onRowAction({ action, row }) {
   if (action === 'view' || action === 'report' || action === 'detail') {
     detailRow.value = row

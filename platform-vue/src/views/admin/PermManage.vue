@@ -54,6 +54,19 @@
 </template>
 
 <script setup>
+/**
+ * PermManage.vue —— ⭐ RBAC 权限矩阵（管理员核心功能！）
+ *
+ * 讲解重点：
+ *   RBAC 模型：用户 → 角色 → 权限 三层解耦
+ *   三级权限：菜单级（能不能看）+ 功能级（能不能操作）+ 数据级（能看谁的数据）
+ *   数据范围：全部 → 园区 → 地块 → 本人（逐级收敛）
+ *
+ * 关键逻辑：
+ *   1. toggle() —— Set 自动去重处理 checkbox 勾选
+ *   2. save() —— 反向同步 r.perm = admin.perms.filter(p => p.roles.includes(r.name))
+ *      即"根据权限勾选情况，反推每个角色拥有的模块权限字符串"
+ */
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import PageHeader from '@/components/PageHeader.vue'

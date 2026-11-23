@@ -62,6 +62,16 @@
 </template>
 
 <script setup>
+/**
+ * UserManage.vue —— 用户管理（讲解重点！）
+ *
+ * 讲解知识点：
+ *   1. Element Plus 表单校验（rules + formRef.validate()）
+ *   2. :disabled="!!editId" 编辑时禁用账号字段（不允许修改登录账号）
+ *   3. 手机号正则校验 /^1[3-9]\d{9}$/
+ *   4. 启停/删除带 ElMessageBox.confirm 二次确认
+ *   5. downloadCsv() 导出 CSV —— columns 配置里的 formatter 自动调用
+ */
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Download, Refresh } from '@element-plus/icons-vue'

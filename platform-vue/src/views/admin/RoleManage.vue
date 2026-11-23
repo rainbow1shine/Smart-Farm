@@ -74,6 +74,16 @@
 </template>
 
 <script setup>
+/**
+ * RoleManage.vue —— 角色管理（RBAC 核心！）
+ *
+ * 讲解知识点：
+ *   1. 卡片式布局（role-grid + role-card），比纯表格更直观
+ *   2. el-checkbox-group 多选分配模块权限
+ *   3. form.checked.join('、') —— checkbox 数组 → 字符串存储
+ *   4. 权限矩阵表：admin.perms × admin.roles 的交叉展示
+ *   5. r.id === 'R1' 禁止删除内置管理员角色（guard clause）
+ */
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, MoreFilled } from '@element-plus/icons-vue'

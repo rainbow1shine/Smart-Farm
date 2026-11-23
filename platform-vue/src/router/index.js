@@ -1,8 +1,33 @@
+/**
+ * ============================================================
+ * 路由配置 —— 管理员模块的「权限大门」
+ * ------------------------------------------------------------
+ * 讲解重点：
+ *   1. meta 元信息控制权限（auth / admin）
+ *   2. beforeEach 全局守卫拦截未登录/越权访问
+ *   3. redirect 参数实现「登录后自动回到原页面」
+ *   4. :page 动态参数 + AdminPage 通用容器 → 配置驱动
+ *   5. Hash 模式适配 GitHub Pages 子路径部署
+ * ============================================================
+ */
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
+/**
+ * 路由表：5 大模块
+ *   /login   → 登录页
+ *   /mall    → 消费者商城（9 个子页面，部分需登录 auth:true）
+ *   /admin   → 管理后台（meta.admin=true 禁止消费者进入）
+ *   /screen  → 可视化大屏
+ *   /mobile  → 移动端预览
+ *
+ * meta 元信息说明：
+ *   auth: true  → 需要登录才能访问
+ *   admin: true → 需要管理员/运维/农户等非 consumer 角色
+ *   title: 'xx' → 浏览器标签页标题
+ */
 const routes = [
-  { path: '/', redirect: '/mall' },
+  { path: '/', redirect: '/mall' },                // 默认进商城
   { path: '/login', name: 'login', component: () => import('@/views/Login.vue'), meta: { title: '登录' } },
   {
     path: '/mall',
@@ -22,10 +47,11 @@ const routes = [
   {
     path: '/admin',
     component: () => import('@/layouts/AdminLayout.vue'),
-    meta: { auth: true, admin: true },
+    meta: { auth: true, admin: true },              // ⭐ 双重守卫：登录 + 管理员角色
     children: [
       { path: '', redirect: '/admin/dashboard' },
       { path: ':page', name: 'admin-page', component: () => import('@/views/admin/AdminPage.vue'), meta: { auth: true, admin: true } }
+      // 👆 动态参数 :page + AdminPage 通用容器 = 配置驱动渲染
     ]
   },
   { path: '/screen', name: 'screen', component: () => import('@/views/Screen.vue'), meta: { title: '可视化大屏' } },
@@ -33,28 +59,56 @@ const routes = [
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFound.vue'), meta: { title: '页面不存在' } }
 ]
 
+/**
+ * createWebHashHistory —— Hash 模式（URL 带 #）
+ * 为什么不用 History 模式？
+ *   因为 GitHub Pages 部署在子路径 /Smart-Farm/ 下，
+ *   Hash 模式不需要服务器配置重写规则，直接能用。
+ *   History 模式需要 Nginx try_files 配置。
+ *
+ * scrollBehavior —— 每次跳转滚回顶部，按浏览器返回键时恢复原位置
+ */
 const router = createRouter({
   history: createWebHashHistory('/Smart-Farm/'),
   routes,
   scrollBehavior(to, from, saved) {
-    if (saved) return saved
+    if (saved) return saved   // 按返回键时回到原滚动位置
     return { top: 0 }
   }
 })
 
+/**
+ * ============================================================
+ * ⭐ 全局前置守卫（beforeEach）—— 管理员权限大门
+ * 按顺序执行 5 件事：
+ * ============================================================
+ */
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
+
+  // ① 初始化 auth store（从 localStorage 恢复登录态）
   if (!auth.ready) await auth.init()
+
+  // ② 设置浏览器标签页标题（配合 meta.title）
   document.title = to.meta.title ? `${to.meta.title} · 智慧农业综合管理平台` : '智慧农业综合管理平台'
+
+  // ③ 登录拦截：需要登录但没登 → 带 redirect 参数跳登录页
+  //    redirect 参数让登录成功后自动回到之前想去的页面
   if (to.meta.auth && !auth.isLogged) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
+
+  // ④ 角色拦截：meta.admin=true 的页面，消费者角色直接踢回商城首页
   if (to.meta.admin && auth.role === 'consumer') {
     return { name: 'mall-home' }
   }
+
+  // ⑤ 智能跳转：已经登录了还访问 /login → 按角色自动分流
+  //    消费者进商城首页，非消费者进管理后台工作台
   if (to.name === 'login' && auth.isLogged) {
     return auth.role === 'consumer' ? { name: 'mall-home' } : { name: 'admin-page', params: { page: 'dashboard' } }
   }
+
   return true
 })
 

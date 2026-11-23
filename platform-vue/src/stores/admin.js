@@ -1,10 +1,36 @@
+/**
+ * ============================================================
+ * 管理员数据 Store —— 全平台业务数据的「单一数据源」
+ * ------------------------------------------------------------
+ * 讲解重点：
+ *   1. LocalStorage 持久化（read/save 双函数），刷新不丢数据
+ *   2. pick() —— 从 db.js 深拷贝所有演示数据做初始化
+ *   3. clone() —— JSON 深拷贝，避免引用类型互相污染
+ *   4. ⭐ 通用 CRUD 三方法 add/update/remove —— 任意集合通用
+ *   5. 业务专用方法封装（shipOrder/handleAlarm/controlDevice 等）
+ *
+ * 真实后端接入：
+ *   只需把这些方法内部改成调用 api.xxx()，组件层完全不用改！
+ *   比如 addUser 改成: const user = await api.createUser(payload)
+ * ============================================================
+ */
 import { defineStore } from 'pinia'
 import DB from '@/data/db'
 import { dateTime, orderNo } from '@/utils/format'
 
 const KEY = 'agri_vue_admin_state_v2'
+
+// ⭐ 深拷贝（JSON 序列化法），避免数组/对象引用污染原始 DB 数据
 const clone = (v) => JSON.parse(JSON.stringify(v))
 
+/**
+ * pick() —— 从 db.js 提取所有业务集合的初始值
+ * 用 clone() 深拷贝一份，防止修改 state 时污染原始 DB 对象
+ *
+ * 为什么这么多集合？
+ *   一个完整智慧农业平台需要管理：用户/角色/权限/设备/告警/工单/
+ *   订单/商品/地块/农资/溯源/检测/评价/维修/备份/咨询/日志……
+ */
 const pick = () => ({
   users: clone(DB.users),
   roles: clone(DB.roles),
@@ -34,9 +60,16 @@ const pick = () => ({
   techPlans: clone(DB.techPlans),
   supervise: clone(DB.supervise),
   threshold: { temp: 30, humidity: 35, oxygen: 4.5, repeat: 3, sms: true },
-  permissions: clone(DB.perms)
+  permissions: clone(DB.perms)    // 注意：perms 和 permissions 指向同一份数据，兼容不同代码风格
 })
 
+/**
+ * ⭐ read() —— 启动时读取 localStorage 缓存
+ * 合并策略：{ ...pick(), ...JSON.parse(raw) }
+ *   - pick() 提供完整的默认值（保证新增字段不会 undefined）
+ *   - raw 覆盖上去（用户的实际修改优先）
+ * 好处：版本升级时新增字段，老缓存也不会缺
+ */
 const read = () => {
   try {
     const raw = localStorage.getItem(KEY)
@@ -46,7 +79,8 @@ const read = () => {
 }
 
 export const useAdminStore = defineStore('admin', {
-  state: () => read(),
+  state: () => read(),   // ⭐ 初始化时自动读 localStorage
+
   getters: {
     onlineDevices: (s) => s.devices.filter(d => d.online === 1),
     openAlarms: (s) => s.alarms.filter(a => a.status !== '已闭环' && a.status !== '已处置'),
@@ -54,20 +88,39 @@ export const useAdminStore = defineStore('admin', {
     lowStock: (s) => s.inputs.filter(i => i.stock <= i.min),
     todaySales: (s) => s.orderList.filter(o => o.pay === '已支付').reduce((a, b) => a + b.amount, 0)
   },
+
   actions: {
+    /**
+     * save() —— 💾 持久化到 localStorage
+     * 只存 pick() 定义的字段，避免缓存垃圾数据
+     */
     save() {
       const data = {}
       for (const k of Object.keys(pick())) data[k] = this[k]
       try { localStorage.setItem(KEY, JSON.stringify(data)) } catch {}
     },
+
+    // 恢复演示数据（清空所有用户修改）
     resetDemo() {
       Object.assign(this, pick())
       this.save()
     },
+
+    /**
+     * ============================================================
+     * ⭐ 通用 CRUD —— 一行代码搞定任意集合的增删改
+     * ============================================================
+     * 参数 collection 是 state 里的数组名字符串，比如 'users'、'roles'、'logs'
+     * 为什么能这么写？因为 JavaScript 对象可以用 this[动态key] 访问属性
+     */
+
+    // 新增 → unshift 头部插入（最新的排最上面）
     add(collection, item) {
       this[collection].unshift(item)
       this.save()
     },
+
+    // 修改 → 兼容 id/no/code 三种主键名（不同业务实体主键不一样）
     update(collection, id, patch) {
       const arr = this[collection]
       const item = arr.find(x => x.id === id || x.no === id || x.code === id)
@@ -75,10 +128,23 @@ export const useAdminStore = defineStore('admin', {
       this.save()
       return item
     },
+
+    // 删除 → 同样兼容三种主键
     remove(collection, id) {
       this[collection] = this[collection].filter(x => x.id !== id && x.no !== id && x.code !== id)
       this.save()
     },
+
+    /**
+     * ============================================================
+     * 业务专用方法 —— 封装带业务语义的操作
+     * 为什么通用 add/update 不够？
+     *   通用方法只管数据结构，业务方法需要：生成 ID、设置默认状态、
+     *   写操作日志、联动修改其他集合……比简单 unshift 复杂得多
+     * ============================================================
+     */
+
+    // 用户管理（L82-L94）
     addUser(payload) {
       const user = { id: 'U' + Date.now(), status: '启用', last: dateTime(), ...payload }
       this.users.unshift(user)
@@ -92,6 +158,8 @@ export const useAdminStore = defineStore('admin', {
       this.save()
       return u
     },
+
+    // 订单发货（生成物流信息）
     shipOrder(no, company, tracking) {
       const o = this.orderList.find(x => x.no === no)
       if (!o) return
@@ -105,22 +173,34 @@ export const useAdminStore = defineStore('admin', {
       if (o) o.status = '已完成'
       this.save()
     },
+
+    // 告警处置（写处置记录）
     handleAlarm(id, note, status = '已处置') {
       const a = this.alarms.find(x => x.id === id)
       if (a) { a.status = status; a.note = note; a.handledAt = dateTime(); a.handler = 王运维 }
       this.save()
       return a
     },
+
+    /**
+     * ⭐ 远程控制设备 —— 业务逻辑复杂的典型例子
+     *   1. 改设备状态
+     *   2. 写操作日志到 logs 表（审计追踪）
+     *   通用方法做不到这一步，所以必须单独封装
+     */
     controlDevice(id, action) {
       const d = this.devices.find(x => x.id === id)
       if (!d) return
       d.status = action === 'on' ? '运行' : '停止'
       d.value = action === 'on' ? '设备运行中' : '设备已关闭'
       d.last = dateTime()
+      // 👆 关键！操作设备的同时自动写日志
       this.logs.unshift({ time: dateTime(), user: '当前用户', role: '运维', ip: '10.20.0.9', action: `${action === 'on' ? '开启' : '关闭'} ${d.name}`, type: '操作日志', result: '成功' })
       this.save()
       return d
     },
+
+    // 工单管理（L124-L146）—— 打卡更新进度
     addWorkorder(payload) {
       const wo = {
         id: 'WO-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-' + String(this.workorders.length + 1).padStart(2, '0'),
@@ -144,12 +224,15 @@ export const useAdminStore = defineStore('admin', {
       if (w) { w.progress = 100; w.status = '已完成' }
       this.save()
     },
+
+    // 评价回复 / 消费者管理（L147-L162）
     replyReview(id, reply) {
       const r = this.reviews.find(x => x.id === id)
       if (r) { r.reply = reply; r.status = '已回复' }
       this.save()
     },
     removeReview(id) { this.remove('reviews', id) },
+    // 警告逻辑：警告次数 >= 3 → 自动限制账号
     warnConsumer(id) {
       const c = this.consumers.find(x => x.id === id)
       if (c) { c.warn = (c.warn || 0) + 1; c.status = c.warn >= 3 ? '已限制' : '已警告' }
@@ -160,6 +243,8 @@ export const useAdminStore = defineStore('admin', {
       if (c) c.status = '已限制'
       this.save()
     },
+
+    // 商品监管（审核上下架）
     auditGoods(id, status) {
       const g = this.goods.find(x => x.id === id)
       if (g) g.audit = status
@@ -171,6 +256,8 @@ export const useAdminStore = defineStore('admin', {
       this.save()
       return g
     },
+
+    // 报修工单（L174-L188）
     addRepair(payload) {
       const r = { id: 'RP-' + Date.now().toString().slice(-4), status: '待接单', time: dateTime(), assignee: '—', ...payload }
       this.repairs.unshift(r)
@@ -187,16 +274,22 @@ export const useAdminStore = defineStore('admin', {
       if (r) r.status = '已完成'
       this.save()
     },
+
+    // 系统备份（模拟，实际需要后端文件操作）
     addBackup() {
       const b = { id: 'BK-' + new Date().toISOString().slice(0, 10).replace(/-/g, ''), name: '手动备份', size: '86.6 MB', type: '手动', time: dateTime(), status: '成功' }
       this.backups.unshift(b)
       this.save()
       return b
     },
+
+    /**
+     * 在线咨询 —— 农艺师 / 农户共用一条会话线程
+     * 双方都能持续对话，消息用 messages 数组存储
+     */
     replyConsult(id, reply) {
       this.sendConsultMessage(id, 'expert', reply)
     },
-    /* 农艺 / 农户共用一条会话线程，双方都能持续对话 */
     sendConsultMessage(id, from, text) {
       const c = this.consults.find(x => x.id === id)
       if (!c || !text) return null
@@ -226,6 +319,8 @@ export const useAdminStore = defineStore('admin', {
       this.save()
       return c
     },
+
+    // 病虫害诊断 / 技术方案（L229-L239）
     addPestCase(payload) {
       const p = { id: 'PC-' + Date.now().toString().slice(-4), status: '待复核', time: dateTime(), ...payload }
       this.pestCases.unshift(p)
@@ -238,6 +333,8 @@ export const useAdminStore = defineStore('admin', {
       this.save()
       return p
     },
+
+    // 阈值 / 策略 / 定时器（L241-L251）
     updateThreshold(patch) { Object.assign(this.threshold, patch); this.save() },
     toggleStrategy(id) {
       const s = this.strategies.find(x => x.id === id)
