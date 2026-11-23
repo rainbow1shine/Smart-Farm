@@ -62,6 +62,7 @@
 </template>
 
 <script setup>
+// 用户管理：表单校验 + 正则手机号 + 二次确认弹窗
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Download, Refresh } from '@element-plus/icons-vue'

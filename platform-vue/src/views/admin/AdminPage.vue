@@ -1,6 +1,9 @@
 <template>
   <div class="admin-page page-wrap">
+    <!-- ⭐ Vue 动态组件：有 custom → 渲染独立组件（Dashboard/GIS等复杂页） -->
     <component v-if="meta.custom && customMap[meta.custom]" :is="customMap[meta.custom]" />
+
+    <!-- 无 custom → 用 adminPages.js 配置自动拼页面 -->
     <template v-else>
       <PageHeader :title="meta.title" :sub="meta.sub">
         <template #actions>
@@ -134,6 +137,7 @@ import MallEntry from './MallEntry.vue'
 
 const route = useRoute()
 const admin = useAdminStore()
+// customMap —— key 对应 adminPages.js 里 META.custom 值
 const customMap = {
   Dashboard, UserManage, RoleManage, PermManage, ParamManage, DeviceManage, CollectManage, BackupManage,
   RepairManage, ReviewManage, GoodsManage, ConsumerManage, ExpertEnv, PestDiagnosis, OrderManage,
@@ -141,6 +145,7 @@ const customMap = {
   GisMap, AiAnalysis, DataReport, Consult, MallEntry
 }
 
+// computed —— 从 adminPages.js 工厂函数拿配置
 const meta = computed(() => getPageMeta(route.params.page))
 const config = computed(() => getPageConfig(route.params.page, admin))
 const rows = computed(() => config.value?.rows?.() || [])
@@ -149,6 +154,7 @@ const actionWidth = computed(() => {
   return Math.max(100, n * 58 + 20)
 })
 
+// 三种弹窗状态（复用一个模板，动态改变量）
 const detailOpen = ref(false)
 const detailRow = ref(null)
 const detailTitle = ref('详情')
@@ -163,49 +169,41 @@ const actionFields = ref([])
 let pendingAction = null
 
 function refresh() { ElMessage.success('数据已刷新') }
+
+// ⭐⭐⭐ onRowAction —— 通用操作分发器（讲解重点！）
+// config.rowActions 里配什么 key，这里就处理什么
 function onRowAction({ action, row }) {
-  if (action === 'view' || action === 'report' || action === 'detail') {
-    detailRow.value = row
-    detailTitle.value = meta.value.title + ' · 详情'
-    detailOpen.value = true
-    return
+  if (action === 'view' || action === 'report' || action === 'detail') {   // 弹详情抽屉
+    detailRow.value = row; detailTitle.value = meta.value.title + ' · 详情'
+    detailOpen.value = true; return
   }
-  if (action === 'edit' || action === 'audit' || action === 'assess') {
-    startEdit(row)
-    return
+  if (action === 'edit' || action === 'audit' || action === 'assess') {   // 弹编辑弹窗
+    startEdit(row); return
   }
-  if (action === 'delete') {
+  if (action === 'delete') {                                              // 确认 + 删除
     ElMessageBox.confirm('删除后不可恢复，确定删除该记录？', '删除确认', { type: 'warning' }).then(() => {
-      admin.remove(config.value.collection, row.id || row.no || row.code)
-      ElMessage.success('已删除')
-    }).catch(() => {})
-    return
+      admin.remove(config.value.collection, row.id || row.no || row.code); ElMessage.success('已删除')
+    }).catch(() => {}); return
   }
-  if (action === 'toggle') {
+  if (action === 'toggle') {                                              // 状态翻转
     if (row.status === '已授权') row.status = '待配置'
     else if (row.status === '待配置') row.status = '已授权'
     else row.status = row.status === '启用' ? '停用' : '启用'
-    admin.save()
-    ElMessage.success('状态已更新')
-    return
+    admin.save(); ElMessage.success('状态已更新'); return
   }
-  if (action === 'reply') {
+  if (action === 'reply') {                                               // 弹回复框
     openAction('回复', [{ key: 'reply', label: '回复内容', type: 'textarea' }], { reply: row.reply || '' }, () => {
-      admin.replyReview(row.id, actionForm.reply)
-      ElMessage.success('回复已发送')
-    })
-    return
+      admin.replyReview(row.id, actionForm.reply); ElMessage.success('回复已发送')
+    }); return
   }
-  if (action === 'ship') {
+  if (action === 'ship') {                                                // 弹发货框
     openAction('发货', [
       { key: 'company', label: '物流公司', type: 'select', options: ['顺丰冷链', '京东冷链', '中通冷链', '自提'] },
       { key: 'tracking', label: '运单号' }
     ], { company: '顺丰冷链', tracking: '' }, () => {
       if (!actionForm.tracking) return ElMessage.warning('请填写运单号')
-      admin.shipOrder(row.no, actionForm.company, actionForm.tracking)
-      ElMessage.success('发货成功')
-    })
-    return
+      admin.shipOrder(row.no, actionForm.company, actionForm.tracking); ElMessage.success('发货成功')
+    }); return
   }
   if (action === 'assign') { admin.assignRepair(row.id); ElMessage.success('已派单给运维'); return }
   if (action === 'finish') { admin.finishRepair(row.id); ElMessage.success('维修已完成'); return }

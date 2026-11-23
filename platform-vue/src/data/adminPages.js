@@ -1,7 +1,14 @@
+// ⭐⭐⭐ 配置驱动页面引擎 —— AdminPage 的大脑（讲解重点！）
+// 两个核心表：META（页面元信息）+ CONFIG（详细配置）
+// 两种页面：custom（独立组件）/ collection（纯配置，不用写组件）
 import DB from '@/data/db'
 
+// S —— StatCard 快捷工厂：label/value/unit/foot/icon/tone
 const S = (label, value, unit, foot, icon, tone) => ({ label, value, unit, foot, icon, tone })
 
+// META —— pageId → { title, sub, custom?, collection? }
+// custom: 复杂页面 → AdminPage 用动态组件渲染独立 Vue 文件
+// collection: 简单页面 → 完全配置驱动，不用写组件！
 const META = {
   dashboard: { title: '工作台', sub: '园区生产运行总览', custom: 'Dashboard' },
   user: { title: '用户管理', sub: '平台账号新增、修改、启停与查询', custom: 'UserManage' },
@@ -387,15 +394,20 @@ const CONFIG = {
   }
 }
 
+// ⭐ getPageConfig —— 工厂函数：META + CONFIG + store → 完整页面配置
+// 输入：pageId（路由 :page 参数）+ admin store
+// 输出：AdminPage.vue 直接消费的配置对象（响应式）
 export function getPageConfig(id, store) {
   const meta = META[id] || {}
   if (!meta.collection || !store) return null
   const base = CONFIG[id] || {}
   return {
     ...base,
-    rows: () => store[meta.collection] || [],
+    rows: () => store[meta.collection] || [],   // 💡 动态函数 → 响应式
     collection: meta.collection,
+    // columns 兜底：CONFIG 没配就用数据字段自动生成
     columns: base.columns || Object.keys(store[meta.collection]?.[0] || {}).map(k => ({ prop: k, label: k, minWidth: 120 })),
+    // 💡 动态 stats：函数型 value 执行，得到实时数字
     stats: (base.stats || []).map(s => ({ ...s, value: typeof s.value === 'function' ? s.value(store) : s.value })),
     rowActions: base.rowActions || [{ key: 'view', label: '详情' }]
   }

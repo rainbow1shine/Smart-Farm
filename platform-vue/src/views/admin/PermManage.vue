@@ -54,6 +54,7 @@
 </template>
 
 <script setup>
+// RBAC 权限矩阵：角色×模块交叉表，Set 去重勾选 + 反向同步 r.perm
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Check, Refresh } from '@element-plus/icons-vue'
 import PageHeader from '@/components/PageHeader.vue'

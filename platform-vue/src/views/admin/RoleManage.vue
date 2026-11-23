@@ -74,6 +74,7 @@
 </template>
 
 <script setup>
+// 角色管理：卡片式布局 + checkbox 分配权限（join('、') 存字符串）
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, MoreFilled } from '@element-plus/icons-vue'
